@@ -2,6 +2,11 @@ package practicumopdracht.models;
 
 import java.time.LocalDate;
 
+/**
+ * Detail model voor OOP2 practicumopdracht.
+ *
+ * @author Ghizlane el Adak
+ */
 public class Resultaat {
     private int studentennummer;
     private String volledigeNaamStudent;
@@ -19,32 +24,13 @@ public class Resultaat {
         this.hoortBijVak = hoortBijVak;
     }
 
-    public int getStudentennummer() {
-        return studentennummer;
-    }
-
-    public String getVolledigeNaamStudent() {
-        return volledigeNaamStudent;
-    }
-
-    public LocalDate getDatum() {
-        return datum;
-    }
-
-    public double getCijfer() {
-        return cijfer;
-    }
-
-    public boolean isGehaald() {
-        return gehaald;
-    }
-
-    public Vak getHoortBijVak() {
-        return hoortBijVak;
-    }
-
     @Override
     public String toString() {
-        return hoortBijVak + " op: " + datum + "\n" + studentennummer + " " + volledigeNaamStudent + ", cijfer: " + cijfer + ", status gehaald: " + gehaald;
+        return hoortBijVak
+                + "\n\nStudentennummer: " + studentennummer
+                + "\nNaam van de student: " + volledigeNaamStudent
+                + "\nDatum van toetsafname: " + datum
+                + "\nBehaalde cijfer: " + cijfer
+                + "\nStatus behaling: " + gehaald;
     }
 }

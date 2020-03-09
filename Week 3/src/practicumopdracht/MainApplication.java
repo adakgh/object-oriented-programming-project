@@ -5,14 +5,19 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import practicumopdracht.controllers.Controller;
 import practicumopdracht.controllers.VakController;
-import practicumopdracht.views.VakView;
 
+/**
+ * Mainapplicarion class voor OOP2 practicumopdracht.
+ *
+ * @author Ghizlane el Adak
+ */
 public class MainApplication extends Application {
     private String TITLE = "Practicumopdracht OOP2 - Ghizlane el Adak";
     private final int WIDTH = 640;
     private final int HEIGHT = 480;
     private static Stage stage;
 
+    @Override
     public void start(Stage stage) {
         this.stage = stage;
 
@@ -20,27 +25,12 @@ public class MainApplication extends Application {
         stage.setWidth(WIDTH);
         stage.setHeight(HEIGHT);
 
-        VakController controller = new VakController();
-        VakView view = controller.getView();
-
-        Scene mainScene = new Scene(
-                view.getRoot(),
-                300,
-                200
-        );
-
         switchController(new VakController());
-
-        stage.setScene(mainScene);
         stage.show();
     }
 
     public static void switchController(Controller controller){
-        Scene vakScene = new Scene(
-                controller.getView().getRoot());
-
-        stage.setScene(vakScene);
-        stage.show();
+       stage.setScene(new Scene(controller.getView().getRoot()));
     }
 }
 

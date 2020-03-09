@@ -8,24 +8,28 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import practicumopdracht.models.Vak;
 
+/**
+ * Master view voor OOP2 practicumopdracht.
+ *
+ * @author Ghizlane el Adak
+ */
 public class VakView extends View {
     //Attributen
     private TextArea toetsNaamInvoerVeld;
     private TextField aantalGemaakteToetsenInvoerVeld;
-    private ComboBox vakComboBox;
+    private TextField vak;
     private Button opslaanButton;
     private ListView<Vak> listView;
     private Button nieuwButton;
     private Button verwijderenButton;
     private Button terugButton;
-
     private GridPane view;
     private VBox vBox;
     private HBox hBox;
 
     public VakView() {
         initLayout();
-        initVak();
+//        initVak();
     }
 
     private void initLayout() {
@@ -34,7 +38,7 @@ public class VakView extends View {
         Label naamLabel = new Label("Naam van de toets:");
         Label aantalToetsenLabel = new Label("Aantal gemaakte toetsen:");
 
-        vakComboBox = new ComboBox();
+        vak = new TextField();
         opslaanButton = new Button("Opslaan");
         listView = new ListView<>();
         toetsNaamInvoerVeld = new TextArea();
@@ -50,12 +54,8 @@ public class VakView extends View {
 
         view.add(vakcomboBoxLabel, 0, 0);
         vakcomboBoxLabel.setPrefWidth(300);
-        view.add(vakComboBox, 1, 0);
-        vakComboBox.setPrefWidth(500);
-        vakComboBox.getItems().add("Programming");
-        vakComboBox.getItems().add("OOP1");
-        vakComboBox.getItems().add("OOP2");
-        vakComboBox.getItems().add("Databases");
+        view.add(vak, 1, 0);
+        vak.setPrefWidth(500);
 
         view.add(naamLabel, 0, 1);
         view.add(toetsNaamInvoerVeld, 1, 1);
@@ -92,14 +92,15 @@ public class VakView extends View {
     }
 
     //test
-    private void initVak() {
-        Vak mijnVak = new Vak("Programming", "1e toets", 12);
-        vakComboBox.setPromptText(mijnVak.getVakNaam());
-        toetsNaamInvoerVeld.setText(mijnVak.getToetsNaam());
-        aantalGemaakteToetsenInvoerVeld.setText(String.valueOf(mijnVak.getAantalGemaakteToetsen()));
-        listView.getItems().add(mijnVak);
-    }
+//    private void initVak() {
+//        Vak mijnVak = new Vak("Programming", "1e toets", 12);
+//        vakComboBox.setPromptText(mijnVak.getVakNaam());
+//        toetsNaamInvoerVeld.setText(mijnVak.getToetsNaam());
+//        aantalGemaakteToetsenInvoerVeld.setText(String.valueOf(mijnVak.getAantalGemaakteToetsen()));
+//        listView.getItems().add(mijnVak);
+//    }
 
+    //getters
     public Button getOpslaanButton() {
         return opslaanButton;
     }
@@ -114,6 +115,18 @@ public class VakView extends View {
 
     public Button getTerugButton() {
         return terugButton;
+    }
+
+    public TextArea getToetsNaamInvoerVeld() {
+        return toetsNaamInvoerVeld;
+    }
+
+    public TextField getAantalGemaakteToetsenInvoerVeld() {
+        return aantalGemaakteToetsenInvoerVeld;
+    }
+
+    public TextField getVak() {
+        return vak;
     }
 
     @Override

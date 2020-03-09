@@ -9,8 +9,11 @@ import javafx.scene.layout.VBox;
 import practicumopdracht.models.Resultaat;
 import practicumopdracht.models.Vak;
 
-import java.time.LocalDate;
-
+/**
+ * Detail view voor OOP2 practicumopdracht.
+ *
+ * @author Ghizlane el Adak
+ */
 public class ResultaatView extends View {
     private TextField studentennummerInvoerVeld;
     private TextField volledigeNaamStudentInvoerVeld;
@@ -23,16 +26,15 @@ public class ResultaatView extends View {
     private Button verwijderenButton;
     private Button terugButton;
     private ComboBox<Vak> vakken;
-
+    private GridPane view;
     private VBox vBox;
     private HBox hBox;
 
-    private GridPane view;
-
+    VakView vakView;
 
     public ResultaatView() {
         initLayout();
-        initResultaat();
+//        initResultaat();
     }
 
     private void initLayout() {
@@ -61,9 +63,10 @@ public class ResultaatView extends View {
         view.setVgap(10);
         view.setPadding(new Insets(10, 10, 10, 10));
 
-        view.add(vakkenLabel, 0,0);
+        view.add(vakkenLabel, 0, 0);
         view.add(vakken, 1, 0);
         vakken.setPrefWidth(500);
+        vakken.getItems().add(new Vak("Vak 1", "Toets 1", 10));
 
         view.add(studentennummerLabel, 0, 1);
         view.add(studentennummerInvoerVeld, 1, 1);
@@ -109,16 +112,17 @@ public class ResultaatView extends View {
     }
 
     //test
-    public void initResultaat() {
-        Resultaat mijnResultaat = new Resultaat(123456789, "Testpersoon Test", LocalDate.now(), 8.9, true, new Vak("Programming", "Practicum 1", 12));
-        studentennummerInvoerVeld.setText(String.valueOf(mijnResultaat.getStudentennummer()));
-        volledigeNaamStudentInvoerVeld.setText(mijnResultaat.getVolledigeNaamStudent());
-        datumInvoerVeld.setValue(mijnResultaat.getDatum());
-        cijferInvoerVeld.setText(String.valueOf(mijnResultaat.getCijfer()));
-        gehaaldInvoerVeld.setSelected(mijnResultaat.isGehaald());
-        listView.getItems().add(mijnResultaat);
-    }
+//    public void initResultaat() {
+//        Resultaat mijnResultaat = new Resultaat(123456789, "Testpersoon Test", LocalDate.now(), 8.9, true, new Vak("Programming", "Practicum 1", 12));
+//        studentennummerInvoerVeld.setText(String.valueOf(mijnResultaat.getStudentennummer()));
+//        volledigeNaamStudentInvoerVeld.setText(mijnResultaat.getVolledigeNaamStudent());
+//        datumInvoerVeld.setValue(mijnResultaat.getDatum());
+//        cijferInvoerVeld.setText(String.valueOf(mijnResultaat.getCijfer()));
+//        gehaaldInvoerVeld.setSelected(mijnResultaat.isGehaald());
+//        listView.getItems().add(mijnResultaat);
+//    }
 
+    //getters
     public Button getOpslaanButton() {
         return opslaanButton;
     }
@@ -133,6 +137,30 @@ public class ResultaatView extends View {
 
     public Button getTerugButton() {
         return terugButton;
+    }
+
+    public TextField getStudentennummerInvoerVeld() {
+        return studentennummerInvoerVeld;
+    }
+
+    public TextField getVolledigeNaamStudentInvoerVeld() {
+        return volledigeNaamStudentInvoerVeld;
+    }
+
+    public DatePicker getDatumInvoerVeld() {
+        return datumInvoerVeld;
+    }
+
+    public TextField getCijferInvoerVeld() {
+        return cijferInvoerVeld;
+    }
+
+    public CheckBox getGehaaldInvoerVeld() {
+        return gehaaldInvoerVeld;
+    }
+
+    public ComboBox<Vak> getVakken() {
+        return vakken;
     }
 
     @Override

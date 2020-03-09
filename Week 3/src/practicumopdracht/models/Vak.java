@@ -1,5 +1,10 @@
 package practicumopdracht.models;
 
+/**
+ * Main model voor OOP2 practicumopdracht.
+ *
+ * @author Ghizlane el Adak
+ */
 public class Vak {
     private String vakNaam;
     private String toetsNaam;
@@ -11,21 +16,11 @@ public class Vak {
         this.aantalGemaakteToetsen = aantalGemaakteToetsen;
     }
 
-    public String getVakNaam() {
-        return vakNaam;
-    }
-
-    public String getToetsNaam() {
-        return toetsNaam;
-    }
-
-    public int getAantalGemaakteToetsen() {
-        return aantalGemaakteToetsen;
-    }
-
     @Override
     public String toString() {
-        return vakNaam + ", " + toetsNaam + ": " + aantalGemaakteToetsen + " toetsen gemaakt";
+        return "Naam van het vak: " + vakNaam
+                + "\nNaam van de toets: " + toetsNaam
+                + "\nAantal gemaakte toetsen: " + aantalGemaakteToetsen;
     }
 
 }
