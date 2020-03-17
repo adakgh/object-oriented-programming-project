@@ -45,7 +45,7 @@ public class VakView extends View {
         aantalGemaakteToetsenInvoerVeld = new TextField();
         nieuwButton = new Button("Nieuw");
         verwijderenButton = new Button("Verwijderen");
-        terugButton = new Button("Terug naar overzicht");
+        terugButton = new Button("Ga naar resultaat");
 
         view = new GridPane();
         view.setHgap(15);

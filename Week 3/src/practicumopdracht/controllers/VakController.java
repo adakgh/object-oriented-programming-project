@@ -6,6 +6,8 @@ import practicumopdracht.models.Vak;
 import practicumopdracht.views.VakView;
 import practicumopdracht.views.View;
 
+import static java.lang.Integer.parseInt;
+
 /**
  * Master controller voor OOP2 practicumopdracht.
  *
@@ -68,7 +70,7 @@ public class VakController extends Controller {
 
             Vak newVak = new Vak(vakView.getVak().getText(),
                     vakView.getToetsNaamInvoerVeld().getText(),
-                    vakView.getAantalGemaakteToetsenInvoerVeld().getLength());
+                    parseInt(vakView.getAantalGemaakteToetsenInvoerVeld().getText()));
             alert.setContentText("Deze gegevens zijn succesvol opgeslagen: \n\n" + newVak);
 
             vakView.getVak().clear();
