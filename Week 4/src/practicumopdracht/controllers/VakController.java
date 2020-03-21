@@ -170,7 +170,7 @@ public class VakController extends Controller {
     //listview item bewerken
     public void pressedBewerken() {
         Vak bewerkteItem = vakView.getListView().getSelectionModel().getSelectedItem();
-        if (vakView.getListView().getSelectionModel().getSelectedItem().getId() == 1) {
+        if (bewerkteItem.getId() == bewerkteItem.getId()) {
             alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setHeaderText("Bewerken is gelukt!");
 

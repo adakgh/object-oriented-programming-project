@@ -257,7 +257,7 @@ public class ResultaatController extends Controller {
     //listview item bewerken
     public void pressedBewerken() {
         Resultaat bewerkteItem = resultaatView.getListView().getSelectionModel().getSelectedItem();
-        if (resultaatView.getListView().getSelectionModel().getSelectedItem().getId() == 1) {
+        if (bewerkteItem.getId() == bewerkteItem.getId()) {
             alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setHeaderText("Bewerken is gelukt!");
 
