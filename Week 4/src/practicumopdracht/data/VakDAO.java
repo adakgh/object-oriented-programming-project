@@ -3,8 +3,11 @@ package practicumopdracht.data;
 import practicumopdracht.models.Vak;
 
 import java.util.ArrayList;
-import java.util.List;
-
+/**
+ * Master DAO voor OOP2 practicumopdracht.
+ *
+ * @author Ghizlane el Adak
+ */
 public abstract class VakDAO implements DAO<Vak> {
     protected ArrayList<Vak> objects;
     private int id = 1;
@@ -33,11 +36,15 @@ public abstract class VakDAO implements DAO<Vak> {
 
     @Override
     public void addOrUpdate(Vak object) {
-        if (objects.indexOf(object) > -1){
-            objects.set(objects.indexOf(object), object);
-        } else {
-            objects.add(getUniqueId(), object);
+        if (object.getId() < 1)
+        {
+            object.setId(getUniqueId());
+            objects.add(object);
+            return;
         }
+        int indexOfObject = objects.indexOf(get(object.getId()));
+        objects.remove(indexOfObject);
+        objects.add(indexOfObject, object);
     }
 
     @Override

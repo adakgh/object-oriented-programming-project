@@ -2,15 +2,19 @@ package practicumopdracht.controllers;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.input.MouseEvent;
 import practicumopdracht.MainApplication;
 import practicumopdracht.data.FakeResultaatDAO;
+import practicumopdracht.data.FakeVakDAO;
 import practicumopdracht.models.Resultaat;
+import practicumopdracht.models.Vak;
 import practicumopdracht.views.ResultaatView;
-import practicumopdracht.views.VakView;
 import practicumopdracht.views.View;
 
+import java.util.List;
 import java.util.Optional;
 
 import static java.lang.Integer.parseInt;
@@ -24,45 +28,41 @@ public class ResultaatController extends Controller {
     private ResultaatView resultaatView;
     private Alert alert;
     private FakeResultaatDAO resultaatDAO;
-    private VakView vakView;
+    private FakeVakDAO vakDAO;
 
-    private String vakIsVerplicht = "- Vak is verplicht!";
-    private String studentennummerIsVerplicht = "- Studentennummer is verplicht of ongeldig!";
-    private String datumIsOngeldig = "- Datum van toetsafname is verplicht of ongeldig!";
-    private String naamIsVerplicht = "- Volledige naam is verplicht of ongeldig!";
-    private String cijferIsOngeldig = "- Behaalde cijfer is verplicht of ongeldig!";
+    private final String VAK_IS_VERPLICHT = "- Vak is verplicht!";
+    private final String STUDENTENNUMMER_IS_VERPLICHT = "- Studentennummer is verplicht of ongeldig!";
+    private final String DATUM_IS_ONGELDIG = "- Datum van toetsafname is verplicht of ongeldig!";
+    private final String NAAM_IS_VERPLICHT = "- Volledige naam is verplicht of ongeldig!";
+    private final String CIJFER_IS_ONGELDIG = "- Behaalde cijfer is verplicht of ongeldig!";
 
     public ResultaatController() {
         resultaatView = new ResultaatView();
-        vakView = new VakView();
+        vakDAO = new FakeVakDAO();
 
-        resultaatView.getTerugButton().setOnAction(actionEvent -> pressedTerug());
+        resultaatView.getTerugButton().setOnAction(e -> pressedTerug());
         resultaatView.getNieuwButton().setOnAction(e -> pressedNieuw());
         resultaatView.getVerwijderenButton().setOnAction(e -> pressedVerwijderen());
         resultaatView.getOpslaanButton().setOnAction(e -> pressedOpslaan());
 
         resultaatDAO = new FakeResultaatDAO();
         refreshData();
-//        fillVakken();
+        fillVakken();
+        pressedItem();
     }
 
     //data verkrijgen
     private void refreshData() {
         ObservableList<Resultaat> resultaatList = FXCollections.observableList(resultaatDAO.getAll());
         resultaatView.getListView().setItems(resultaatList);
-
-
-        for (int i = 0; i < vakView.getListView().getItems().size(); i++) {
-            resultaatView.getVakken().getItems().add(vakView.getListView().getItems().get(i));
-        }
-
     }
-//    public void fillVakken(){
-//        for (int i = 0; i < vakView.getListView().getItems().size(); i++) {
-//            resultaatView.getVakken().getItems().add(vakView.getListView().getItems().get(i));
-//        }
-//    }
 
+    //combobox met vakken vullen
+    public void fillVakken(){
+        List<Vak> vaklist = vakDAO.getAll();
+        ObservableList<Vak> observableVakList = FXCollections.observableList(vaklist);
+        resultaatView.getVakken().setItems(observableVakList);
+    }
 
     //switchen van view
     public void pressedTerug() {
@@ -89,16 +89,20 @@ public class ResultaatController extends Controller {
 
         if (selectedItem == null) {
             alert = new Alert(Alert.AlertType.ERROR);
-            alert.setContentText("Je hebt niks geselecteerd!");
+            alert.setContentText("Je hebt geen item geselecteerd om te verwijderen!");
             alert.show();
         } else {
-            resultaatDAO.remove(selectedItem);
-            refreshData();
-
-            alert = new Alert(Alert.AlertType.INFORMATION);
+            alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Verwijderen");
-            alert.setHeaderText("Je hebt dit item succesvol verwijderd!");
-            alert.show();
+            alert.setHeaderText("Je hebt op de verwijder-knop gedrukt!");
+            alert.setContentText("Weet je zeker dat je deze item wilt verwijderen?");
+            Optional<ButtonType> resultverwijderen = alert.showAndWait();
+
+            if (resultverwijderen.get() == ButtonType.OK) {
+                resultaatDAO.remove(selectedItem);
+                refreshData();
+                refreshFields();
+            }
         }
     }
 
@@ -118,12 +122,12 @@ public class ResultaatController extends Controller {
     }
 
     //datum is ongeldig
-    public boolean datumIsOngeldig(){
+    public boolean datumIsEmpty(){
         return (resultaatView.getDatumInvoerVeld().getValue() == null);
     }
 
     //cijfer is ongeldig
-    public boolean cijferIsOngeldig(){
+    public boolean cijferIsEmpty(){
         return (resultaatView.getCijferInvoerVeld().getText().isEmpty() || resultaatView.getCijferInvoerVeld().getText().matches("[A-Za-z]") || resultaatView.getCijferInvoerVeld().getText().trim().isEmpty());
     }
 
@@ -132,75 +136,74 @@ public class ResultaatController extends Controller {
         alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle("Opslaan");
         alert.setHeaderText("De volgende fouten zijn gevonden: ");
-        if (comboboxIsNull()
-                && studentennummerIsEmpty() && naamIsEmpty() && datumIsOngeldig() && cijferIsOngeldig()) {
-            alert.setContentText(vakIsVerplicht + "\n" + studentennummerIsVerplicht + "\n"+ naamIsVerplicht + "\n"+ datumIsOngeldig + "\n" + cijferIsOngeldig);
+        if (comboboxIsNull() && studentennummerIsEmpty() && naamIsEmpty() && datumIsEmpty() && cijferIsEmpty()) {
+            alert.setContentText(VAK_IS_VERPLICHT + "\n" + STUDENTENNUMMER_IS_VERPLICHT + "\n"+ NAAM_IS_VERPLICHT + "\n"+ DATUM_IS_ONGELDIG + "\n" + CIJFER_IS_ONGELDIG);
 
             //4 niet ingevuld
-        } else if (cijferIsOngeldig() && studentennummerIsEmpty() && naamIsEmpty() && datumIsOngeldig()) {
-            alert.setContentText(studentennummerIsVerplicht + "\n" + naamIsVerplicht +"\n"+ datumIsOngeldig + "\n" + cijferIsOngeldig);
-        } else if (comboboxIsNull() && studentennummerIsEmpty() && naamIsEmpty() && datumIsOngeldig()) {
-            alert.setContentText(vakIsVerplicht + "\n" + studentennummerIsVerplicht + "\n" + naamIsVerplicht + "\n" + datumIsOngeldig);
-        } else if (comboboxIsNull() && studentennummerIsEmpty() && cijferIsOngeldig() && datumIsOngeldig()) {
-            alert.setContentText(vakIsVerplicht + "\n" + studentennummerIsVerplicht + "\n"+ datumIsOngeldig + "\n" + cijferIsOngeldig);
-        } else if (comboboxIsNull() && naamIsEmpty() && cijferIsOngeldig() && datumIsOngeldig()) {
-            alert.setContentText(vakIsVerplicht + "\n" + naamIsVerplicht + "\n"+ datumIsOngeldig + "\n" + cijferIsOngeldig);
-        } else if (comboboxIsNull() && studentennummerIsEmpty() && naamIsEmpty() && cijferIsOngeldig()) {
-            alert.setContentText(vakIsVerplicht + "\n" + studentennummerIsVerplicht + "\n" + naamIsVerplicht + "\n" + cijferIsOngeldig);
+        } else if (cijferIsEmpty() && studentennummerIsEmpty() && naamIsEmpty() && datumIsEmpty()) {
+            alert.setContentText(STUDENTENNUMMER_IS_VERPLICHT + "\n" + NAAM_IS_VERPLICHT +"\n"+ DATUM_IS_ONGELDIG + "\n" + CIJFER_IS_ONGELDIG);
+        } else if (comboboxIsNull() && studentennummerIsEmpty() && naamIsEmpty() && datumIsEmpty()) {
+            alert.setContentText(VAK_IS_VERPLICHT + "\n" + STUDENTENNUMMER_IS_VERPLICHT + "\n" + NAAM_IS_VERPLICHT + "\n" + DATUM_IS_ONGELDIG);
+        } else if (comboboxIsNull() && studentennummerIsEmpty() && cijferIsEmpty() && datumIsEmpty()) {
+            alert.setContentText(VAK_IS_VERPLICHT + "\n" + STUDENTENNUMMER_IS_VERPLICHT + "\n"+ DATUM_IS_ONGELDIG + "\n" + CIJFER_IS_ONGELDIG);
+        } else if (comboboxIsNull() && naamIsEmpty() && cijferIsEmpty() && datumIsEmpty()) {
+            alert.setContentText(VAK_IS_VERPLICHT + "\n" + NAAM_IS_VERPLICHT + "\n"+ DATUM_IS_ONGELDIG + "\n" + CIJFER_IS_ONGELDIG);
+        } else if (comboboxIsNull() && studentennummerIsEmpty() && naamIsEmpty() && cijferIsEmpty()) {
+            alert.setContentText(VAK_IS_VERPLICHT + "\n" + STUDENTENNUMMER_IS_VERPLICHT + "\n" + NAAM_IS_VERPLICHT + "\n" + CIJFER_IS_ONGELDIG);
 
             //3 niet ingevuld
         } else if (comboboxIsNull() && studentennummerIsEmpty() && naamIsEmpty()) {
-            alert.setContentText(vakIsVerplicht + "\n" + studentennummerIsVerplicht + "\n" + naamIsVerplicht);
-        } else if (comboboxIsNull() && studentennummerIsEmpty() && datumIsOngeldig()) {
-            alert.setContentText(vakIsVerplicht + "\n" + studentennummerIsVerplicht + "\n" + datumIsOngeldig);
-        } else if (comboboxIsNull() && studentennummerIsEmpty() && cijferIsOngeldig()) {
-            alert.setContentText(vakIsVerplicht + "\n" + studentennummerIsVerplicht + "\n" + cijferIsOngeldig);
-        } else if (cijferIsOngeldig() && studentennummerIsEmpty() && datumIsOngeldig()) {
-            alert.setContentText(studentennummerIsVerplicht + "\n"+ datumIsOngeldig + "\n" + cijferIsOngeldig);
-        } else if (cijferIsOngeldig() && studentennummerIsEmpty() && naamIsEmpty()) {
-            alert.setContentText(studentennummerIsVerplicht + " \n"+ datumIsOngeldig + "\n" + cijferIsOngeldig);
-        } else if (cijferIsOngeldig() && naamIsEmpty() && datumIsOngeldig()) {
-            alert.setContentText(naamIsVerplicht + "\n"+ datumIsOngeldig + "\n" + cijferIsOngeldig);
-        } else if (cijferIsOngeldig() && naamIsEmpty() && comboboxIsNull()) {
-            alert.setContentText(vakIsVerplicht + "\n" + naamIsVerplicht +"\n" + cijferIsOngeldig);
-        } else if (studentennummerIsEmpty() && naamIsEmpty() && datumIsOngeldig()) {
-            alert.setContentText(studentennummerIsVerplicht + "\n" + naamIsVerplicht + "\n"+ datumIsOngeldig);
-        } else if (comboboxIsNull() && naamIsEmpty() && cijferIsOngeldig()) {
-            alert.setContentText(studentennummerIsVerplicht + "\n" + naamIsVerplicht + "\n" + cijferIsOngeldig);
+            alert.setContentText(VAK_IS_VERPLICHT + "\n" + STUDENTENNUMMER_IS_VERPLICHT + "\n" + NAAM_IS_VERPLICHT);
+        } else if (comboboxIsNull() && studentennummerIsEmpty() && datumIsEmpty()) {
+            alert.setContentText(VAK_IS_VERPLICHT + "\n" + STUDENTENNUMMER_IS_VERPLICHT + "\n" + DATUM_IS_ONGELDIG);
+        } else if (comboboxIsNull() && studentennummerIsEmpty() && cijferIsEmpty()) {
+            alert.setContentText(VAK_IS_VERPLICHT + "\n" + STUDENTENNUMMER_IS_VERPLICHT + "\n" + CIJFER_IS_ONGELDIG);
+        } else if (cijferIsEmpty() && studentennummerIsEmpty() && datumIsEmpty()) {
+            alert.setContentText(STUDENTENNUMMER_IS_VERPLICHT + "\n"+ DATUM_IS_ONGELDIG + "\n" + CIJFER_IS_ONGELDIG);
+        } else if (cijferIsEmpty() && studentennummerIsEmpty() && naamIsEmpty()) {
+            alert.setContentText(STUDENTENNUMMER_IS_VERPLICHT + " \n"+ DATUM_IS_ONGELDIG + "\n" + CIJFER_IS_ONGELDIG);
+        } else if (cijferIsEmpty() && naamIsEmpty() && datumIsEmpty()) {
+            alert.setContentText(NAAM_IS_VERPLICHT + "\n"+ DATUM_IS_ONGELDIG + "\n" + CIJFER_IS_ONGELDIG);
+        } else if (cijferIsEmpty() && naamIsEmpty() && comboboxIsNull()) {
+            alert.setContentText(VAK_IS_VERPLICHT + "\n" + NAAM_IS_VERPLICHT +"\n" + CIJFER_IS_ONGELDIG);
+        } else if (studentennummerIsEmpty() && naamIsEmpty() && datumIsEmpty()) {
+            alert.setContentText(STUDENTENNUMMER_IS_VERPLICHT + "\n" + NAAM_IS_VERPLICHT + "\n"+ DATUM_IS_ONGELDIG);
+        } else if (comboboxIsNull() && naamIsEmpty() && cijferIsEmpty()) {
+            alert.setContentText(STUDENTENNUMMER_IS_VERPLICHT + "\n" + NAAM_IS_VERPLICHT + "\n" + CIJFER_IS_ONGELDIG);
 
             //2 niet ingevuld
-        } else if ((resultaatView.getVakken().getValue() == null && studentennummerIsEmpty())) {
-            alert.setContentText(vakIsVerplicht + "\n" + studentennummerIsVerplicht);
+        } else if (comboboxIsNull() && studentennummerIsEmpty()) {
+            alert.setContentText(VAK_IS_VERPLICHT + "\n" + STUDENTENNUMMER_IS_VERPLICHT);
         } else if (studentennummerIsEmpty() && naamIsEmpty()) {
-            alert.setContentText(studentennummerIsVerplicht + "\n" + naamIsVerplicht);
-        } else if (naamIsEmpty() && datumIsOngeldig()) {
-            alert.setContentText(naamIsVerplicht + "\n" + datumIsOngeldig);
+            alert.setContentText(STUDENTENNUMMER_IS_VERPLICHT + "\n" + NAAM_IS_VERPLICHT);
+        } else if (naamIsEmpty() && datumIsEmpty()) {
+            alert.setContentText(NAAM_IS_VERPLICHT + "\n" + DATUM_IS_ONGELDIG);
         } else if (comboboxIsNull() && naamIsEmpty()) {
-            alert.setContentText(vakIsVerplicht + "\n" + naamIsVerplicht);
-        } else if (comboboxIsNull() && datumIsOngeldig()) {
-            alert.setContentText(vakIsVerplicht + "\n"+ datumIsOngeldig);
-        } else if (comboboxIsNull() && cijferIsOngeldig()) {
-            alert.setContentText(vakIsVerplicht + "\n" + cijferIsOngeldig);
-        } else if (studentennummerIsEmpty() && cijferIsOngeldig()) {
-            alert.setContentText(studentennummerIsVerplicht + "\n" + cijferIsOngeldig);
-        } else if (naamIsEmpty() && cijferIsOngeldig()) {
-            alert.setContentText(naamIsVerplicht + "\n" + cijferIsOngeldig);
-        } else if (datumIsOngeldig() && cijferIsOngeldig()) {
-            alert.setContentText("- Datum van toetsafname isverplicht of ongeldig! \n" + cijferIsOngeldig);
-        } else if (datumIsOngeldig() && studentennummerIsEmpty()) {
-            alert.setContentText(datumIsOngeldig + "\n"+ studentennummerIsVerplicht);
+            alert.setContentText(VAK_IS_VERPLICHT + "\n" + NAAM_IS_VERPLICHT);
+        } else if (comboboxIsNull() && datumIsEmpty()) {
+            alert.setContentText(VAK_IS_VERPLICHT + "\n"+ DATUM_IS_ONGELDIG);
+        } else if (comboboxIsNull() && cijferIsEmpty()) {
+            alert.setContentText(VAK_IS_VERPLICHT + "\n" + CIJFER_IS_ONGELDIG);
+        } else if (studentennummerIsEmpty() && cijferIsEmpty()) {
+            alert.setContentText(STUDENTENNUMMER_IS_VERPLICHT + "\n" + CIJFER_IS_ONGELDIG);
+        } else if (naamIsEmpty() && cijferIsEmpty()) {
+            alert.setContentText(NAAM_IS_VERPLICHT + "\n" + CIJFER_IS_ONGELDIG);
+        } else if (datumIsEmpty() && cijferIsEmpty()) {
+            alert.setContentText(DATUM_IS_ONGELDIG+ "\n" + CIJFER_IS_ONGELDIG);
+        } else if (datumIsEmpty() && studentennummerIsEmpty()) {
+            alert.setContentText(DATUM_IS_ONGELDIG + "\n"+ STUDENTENNUMMER_IS_VERPLICHT);
 
             //1 niet ingevuld
         } else if (comboboxIsNull()) {
-            alert.setContentText(vakIsVerplicht);
+            alert.setContentText(VAK_IS_VERPLICHT);
         } else if (studentennummerIsEmpty()) {
-            alert.setContentText(studentennummerIsVerplicht);
+            alert.setContentText(STUDENTENNUMMER_IS_VERPLICHT);
         } else if (naamIsEmpty()) {
-            alert.setContentText(naamIsVerplicht);
-        } else if (datumIsOngeldig()) {
-            alert.setContentText(datumIsOngeldig);
-        } else if (cijferIsOngeldig()) {
-            alert.setContentText(cijferIsOngeldig);
+            alert.setContentText(NAAM_IS_VERPLICHT);
+        } else if (datumIsEmpty()) {
+            alert.setContentText(DATUM_IS_ONGELDIG);
+        } else if (cijferIsEmpty()) {
+            alert.setContentText(CIJFER_IS_ONGELDIG);
         } else {
             alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setHeaderText("Opslaan is gelukt!");
@@ -230,6 +233,52 @@ public class ResultaatController extends Controller {
         resultaatView.getGehaaldInvoerVeld().setSelected(false);
         resultaatView.getDatumInvoerVeld().setValue(null);
     }
+
+    //listview item onclick event
+    public void pressedItem() {
+        resultaatView.getListView().setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                resultaatView.getOpslaanButton().setOnAction(e -> pressedBewerken());
+                for (int i = 0; i < 10; i++) {
+                    if (resultaatView.getListView().getSelectionModel().getSelectedItem().getId() == i) {
+                        resultaatView.getVakken().setValue(resultaatView.getListView().getSelectionModel().getSelectedItem().getHoortBijVak());
+                        resultaatView.getStudentennummerInvoerVeld().setText(String.valueOf(resultaatView.getListView().getSelectionModel().getSelectedItem().getStudentennummer()));
+                        resultaatView.getVolledigeNaamStudentInvoerVeld().setText(resultaatView.getListView().getSelectionModel().getSelectedItem().getVolledigeNaamStudent());
+                        resultaatView.getDatumInvoerVeld().setValue(resultaatView.getListView().getSelectionModel().getSelectedItem().getDatum());
+                        resultaatView.getCijferInvoerVeld().setText(String.valueOf(resultaatView.getListView().getSelectionModel().getSelectedItem().getCijfer()));
+                        resultaatView.getGehaaldInvoerVeld().setSelected(resultaatView.getListView().getSelectionModel().getSelectedItem().isGehaald());
+                    }
+                }
+            }
+        });
+    }
+
+    //listview item bewerken
+    public void pressedBewerken() {
+        Resultaat bewerkteItem = resultaatView.getListView().getSelectionModel().getSelectedItem();
+        if (resultaatView.getListView().getSelectionModel().getSelectedItem().getId() == 1) {
+            alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setHeaderText("Bewerken is gelukt!");
+
+            bewerkteItem.setHoortBijVak(resultaatView.getVakken().getValue());
+            bewerkteItem.setStudentennummer(Integer.valueOf(resultaatView.getStudentennummerInvoerVeld().getText()));
+            bewerkteItem.setVolledigeNaamStudent(resultaatView.getVolledigeNaamStudentInvoerVeld().getText());
+            bewerkteItem.setDatum(resultaatView.getDatumInvoerVeld().getValue());
+            bewerkteItem.setCijfer(Double.valueOf(resultaatView.getCijferInvoerVeld().getText()));
+            bewerkteItem.setGehaald(resultaatView.getGehaaldInvoerVeld().isSelected());
+
+
+            refreshData();
+            refreshFields();
+            alert.show();
+        } else {
+            alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText("Je hebt niks geselecteerd om te bewerken!");
+            alert.show();
+        }
+    }
+
     @Override
     public View getView() {
         return resultaatView;

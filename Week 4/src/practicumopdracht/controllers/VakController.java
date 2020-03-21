@@ -1,22 +1,18 @@
 package practicumopdracht.controllers;
 
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableArray;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.input.MouseEvent;
 import practicumopdracht.MainApplication;
-import practicumopdracht.data.FakeResultaatDAO;
 import practicumopdracht.data.FakeVakDAO;
-import practicumopdracht.data.ResultaatDAO;
-import practicumopdracht.data.VakDAO;
-import practicumopdracht.models.Resultaat;
 import practicumopdracht.models.Vak;
 import practicumopdracht.views.ResultaatView;
 import practicumopdracht.views.VakView;
 import practicumopdracht.views.View;
 
-import java.util.ArrayList;
 import java.util.Optional;
 
 import static java.lang.Integer.parseInt;
@@ -27,45 +23,31 @@ import static java.lang.Integer.parseInt;
  * @author Ghizlane el Adak
  */
 public class VakController extends Controller {
+    private final String VAK_IS_VERPLICHT = "- Naam van het vak is verplicht!";
+    private final String NAAM_TOETS_IS_VERPLICHT = "- Naam van de toets is verplicht!";
+    private final String AANTAL_GEMAAKTE_TOETSEN_IS_VERPLICHT = "- Aantal gemaakte toetsen is verplicht of ongeldig!";
     private VakView vakView;
     private Alert alert;
     private FakeVakDAO vakDAO;
-    private ResultaatView resultaatView;
-
-    private String vakIsVerplicht = "- Naam van het vak is verplicht!";
-    private String naamToetsIsVerplicht ="- Naam van de toets is verplicht!";
-    private String aantalGemaakteToetsenIsVerplicht = "- Aantal gemaakte toetsen is verplicht of ongeldig!";
 
     public VakController() {
         vakView = new VakView();
-        resultaatView = new ResultaatView();
 
-        vakView.getTerugButton().setOnAction(actionEvent -> pressedTerug());
+        vakView.getTerugButton().setOnAction(e -> pressedTerug());
         vakView.getNieuwButton().setOnAction(e -> pressedNieuw());
         vakView.getVerwijderenButton().setOnAction(e -> pressedVerwijderen());
         vakView.getOpslaanButton().setOnAction(e -> pressedOpslaan());
 
         vakDAO = new FakeVakDAO();
         refreshData();
-//        fillVakken();
+        pressedItem();
     }
 
     //data verkrijgen
     private void refreshData() {
         ObservableList<Vak> vakList = FXCollections.observableList(vakDAO.getAll());
         vakView.getListView().setItems(vakList);
-
-        for (int i = 0; i < vakView.getListView().getItems().size(); i++) {
-            resultaatView.getVakken().getItems().add(vakList.get(i));
-        }
     }
-
-    //combobox met vakken vullen
-//    public void fillVakken(){
-//        for (int i = 0; i < vakView.getListView().getItems().size(); i++) {
-//                resultaatView.getVakken().getItems().add(vakView.getListView().getItems().get(i));
-//        }
-//    }
 
     //switchen van view
     public void pressedTerug() {
@@ -92,16 +74,21 @@ public class VakController extends Controller {
 
         if (selectedItem == null) {
             alert = new Alert(Alert.AlertType.ERROR);
-            alert.setContentText("Je hebt niks geselecteerd!");
+            alert.setTitle("Verwijderen");
+            alert.setContentText("Je hebt geen item geselecteerd om te verwijderen!");
             alert.show();
         } else {
-            vakDAO.remove(selectedItem);
-            refreshData();
-
-            alert = new Alert(Alert.AlertType.INFORMATION);
+            alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Verwijderen");
-            alert.setHeaderText("Je hebt dit item succesvol verwijderd!");
-            alert.show();
+            alert.setHeaderText("Je hebt op de verwijder-knop gedrukt!");
+            alert.setContentText("Weet je zeker dat je deze item wilt verwijderen?");
+            Optional<ButtonType> resultverwijderen = alert.showAndWait();
+
+            if (resultverwijderen.get() == ButtonType.OK) {
+                vakDAO.remove(selectedItem);
+                refreshData();
+                refreshFields();
+            }
         }
     }
 
@@ -112,7 +99,7 @@ public class VakController extends Controller {
 
     //naam van toets is empty
     public boolean naamToetsIsEmpty() {
-    return vakView.getToetsNaamInvoerVeld().getText().isEmpty() || vakView.getToetsNaamInvoerVeld().getText().trim().isEmpty();
+        return vakView.getToetsNaamInvoerVeld().getText().isEmpty() || vakView.getToetsNaamInvoerVeld().getText().trim().isEmpty();
     }
 
     //aantal gemaakt toetsen is empty of getallen
@@ -126,19 +113,19 @@ public class VakController extends Controller {
         alert.setTitle("Opslaan");
         alert.setHeaderText("De volgende fouten zijn gevonden: ");
         if (vakIsEmpty() && aantalToetsenIsEmpty() && naamToetsIsEmpty()) {
-            alert.setContentText(vakIsVerplicht + "\n" + naamToetsIsVerplicht + "\n" + aantalGemaakteToetsenIsVerplicht);
+            alert.setContentText(VAK_IS_VERPLICHT + "\n" + NAAM_TOETS_IS_VERPLICHT + "\n" + AANTAL_GEMAAKTE_TOETSEN_IS_VERPLICHT);
         } else if (vakIsEmpty() && aantalToetsenIsEmpty()) {
-            alert.setContentText(vakIsVerplicht + "\n" + aantalGemaakteToetsenIsVerplicht);
+            alert.setContentText(VAK_IS_VERPLICHT + "\n" + AANTAL_GEMAAKTE_TOETSEN_IS_VERPLICHT);
         } else if (aantalToetsenIsEmpty() && naamToetsIsEmpty()) {
-            alert.setContentText(naamToetsIsVerplicht + "\n" + aantalGemaakteToetsenIsVerplicht);
+            alert.setContentText(NAAM_TOETS_IS_VERPLICHT + "\n" + AANTAL_GEMAAKTE_TOETSEN_IS_VERPLICHT);
         } else if (vakIsEmpty() && naamToetsIsEmpty()) {
-            alert.setContentText(vakIsVerplicht + "\n" + naamToetsIsVerplicht);
+            alert.setContentText(VAK_IS_VERPLICHT + "\n" + NAAM_TOETS_IS_VERPLICHT);
         } else if (vakIsEmpty()) {
-            alert.setContentText(vakIsVerplicht);
+            alert.setContentText(VAK_IS_VERPLICHT);
         } else if (aantalToetsenIsEmpty()) {
-            alert.setContentText(aantalGemaakteToetsenIsVerplicht);
+            alert.setContentText(AANTAL_GEMAAKTE_TOETSEN_IS_VERPLICHT);
         } else if (naamToetsIsEmpty()) {
-            alert.setContentText(naamToetsIsVerplicht);
+            alert.setContentText(NAAM_TOETS_IS_VERPLICHT);
         } else {
             alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setHeaderText("Opslaan is gelukt!");
@@ -161,6 +148,44 @@ public class VakController extends Controller {
         vakView.getVak().clear();
         vakView.getToetsNaamInvoerVeld().clear();
         vakView.getAantalGemaakteToetsenInvoerVeld().clear();
+    }
+
+    //listview item onclick event
+    public void pressedItem() {
+        vakView.getListView().setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                vakView.getOpslaanButton().setOnAction(e -> pressedBewerken());
+                for (int i = 0; i < 10; i++) {
+                    if (vakView.getListView().getSelectionModel().getSelectedItem().getId() == i) {
+                        vakView.getVak().setText(vakView.getListView().getSelectionModel().getSelectedItem().getVakNaam());
+                        vakView.getToetsNaamInvoerVeld().setText(vakView.getListView().getSelectionModel().getSelectedItem().getToetsNaam());
+                        vakView.getAantalGemaakteToetsenInvoerVeld().setText(String.valueOf(vakView.getListView().getSelectionModel().getSelectedItem().getAantalGemaakteToetsen()));
+                    }
+                }
+            }
+        });
+    }
+
+    //listview item bewerken
+    public void pressedBewerken() {
+        Vak bewerkteItem = vakView.getListView().getSelectionModel().getSelectedItem();
+        if (vakView.getListView().getSelectionModel().getSelectedItem().getId() == 1) {
+            alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setHeaderText("Bewerken is gelukt!");
+
+            bewerkteItem.setVakNaam(vakView.getVak().getText());
+            bewerkteItem.setToetsNaam(vakView.getToetsNaamInvoerVeld().getText());
+            bewerkteItem.setAantalGemaakteToetsen(Integer.valueOf(vakView.getAantalGemaakteToetsenInvoerVeld().getText()));
+
+            refreshData();
+            refreshFields();
+            alert.show();
+        } else {
+            alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText("Je hebt niks geselecteerd om te bewerken!");
+            alert.show();
+        }
     }
 
     @Override

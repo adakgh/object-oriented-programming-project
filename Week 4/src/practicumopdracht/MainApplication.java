@@ -22,7 +22,6 @@ public class MainApplication extends Application {
     private static VakDAO vakDAO;
     private static ResultaatDAO resultaatDAO;
 
-
     @Override
     public void start(Stage stage) {
         this.stage = stage;
@@ -40,7 +39,7 @@ public class MainApplication extends Application {
     }
 
     public static VakDAO getVakDAO() {
-       return vakDAO;
+       return getVakDAO();
     }
 
     public static ResultaatDAO getResultaatDAO() {

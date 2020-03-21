@@ -4,8 +4,11 @@ import practicumopdracht.models.Resultaat;
 import practicumopdracht.models.Vak;
 
 import java.util.ArrayList;
-import java.util.List;
-
+/**
+ * Detail DAO voor OOP2 practicumopdracht.
+ *
+ * @author Ghizlane el Adak
+ */
 public abstract class ResultaatDAO implements DAO<Resultaat> {
 
     protected ArrayList<Resultaat> objects;
@@ -27,8 +30,6 @@ public abstract class ResultaatDAO implements DAO<Resultaat> {
         return resultaatList;
     }
 
-
-
     @Override
     public Resultaat get(int id) {
         for(Resultaat resultaat : objects){
@@ -41,11 +42,15 @@ public abstract class ResultaatDAO implements DAO<Resultaat> {
 
     @Override
     public void addOrUpdate(Resultaat object) {
-        if (objects.indexOf(object) > -1){
-            objects.set(objects.indexOf(object), object);
-        } else {
-            objects.add(getUniqueId(), object);
+        if (object.getId() < 1)
+        {
+            object.setId(getUniqueId());
+            objects.add(object);
+            return;
         }
+        int indexOfObject = objects.indexOf(get(object.getId()));
+        objects.remove(indexOfObject);
+        objects.add(indexOfObject, object);
     }
 
     @Override
@@ -60,6 +65,18 @@ public abstract class ResultaatDAO implements DAO<Resultaat> {
     public abstract boolean save();
 
     private int getUniqueId(){
-        return 0;
+        int highestId = -1;
+        for (Resultaat achievement : objects)
+        {
+            if (achievement.getId() > highestId)
+            {
+                highestId = achievement.getId();
+            }
+        }
+        if (highestId == -1)
+        {
+            return 1;
+        }
+        return highestId + 1;
     }
 }

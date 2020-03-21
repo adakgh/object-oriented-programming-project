@@ -170,7 +170,6 @@ public class ResultaatView extends View {
         this.vak = hoortbijVak;
     }
 
-
     public ListView<Resultaat> getListView() {
         return listView;
     }

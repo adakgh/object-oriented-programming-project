@@ -1,17 +1,23 @@
 package practicumopdracht.data;
 
 import practicumopdracht.models.Resultaat;
+import practicumopdracht.models.Vak;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.List;
 
+/**
+ * Detail Fake DAO voor OOP2 practicumopdracht.
+ *
+ * @author Ghizlane el Adak
+ */
 public class FakeResultaatDAO extends ResultaatDAO {
 
     public FakeResultaatDAO(){
         load();
     }
 
-    @Override
+       @Override
     public ArrayList<Resultaat> getAll() {
         return objects;
     }
@@ -19,11 +25,9 @@ public class FakeResultaatDAO extends ResultaatDAO {
     @Override
     public boolean load() {
         objects = new ArrayList<>();
-        objects.add(new Resultaat(-1, 12345, "Test test", null, 10, true, null));
-
+        addOrUpdate(new Resultaat(1, 123456789, "Testpersoon test", LocalDate.now(), 10, true, (new Vak("Programming", "Tentamen", 30))));
         return true;
     }
-
 
     @Override
     public boolean save() {

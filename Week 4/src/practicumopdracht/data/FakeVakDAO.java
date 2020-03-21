@@ -4,6 +4,11 @@ import practicumopdracht.models.Vak;
 
 import java.util.ArrayList;
 
+/**
+ * Master Fake DAO voor OOP2 practicumopdracht.
+ *
+ * @author Ghizlane el Adak
+ */
 public class FakeVakDAO extends VakDAO {
 
     public FakeVakDAO(){
@@ -13,9 +18,9 @@ public class FakeVakDAO extends VakDAO {
     @Override
     public boolean load() {
         objects = new ArrayList<>();
-        objects.add(new Vak("Programming", "Tentamen", 30));
-        objects.add(new Vak("Database", "Herkansing tentamen", 10));
 
+        addOrUpdate(new Vak("Programming", "Tentamen", 30));
+        addOrUpdate(new Vak("Database", "Herkansing tentamen", 10));
         return false;
     }
 

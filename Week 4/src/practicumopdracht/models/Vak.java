@@ -18,8 +18,32 @@ public class Vak {
         this.aantalGemaakteToetsen = aantalGemaakteToetsen;
     }
 
+    public String getVakNaam() {
+        return vakNaam;
+    }
+
+    public String getToetsNaam() {
+        return toetsNaam;
+    }
+
+    public int getAantalGemaakteToetsen() {
+        return aantalGemaakteToetsen;
+    }
+
     public int getId() {
         return id;
+    }
+
+    public void setVakNaam(String vakNaam) {
+        this.vakNaam = vakNaam;
+    }
+
+    public void setToetsNaam(String toetsNaam) {
+        this.toetsNaam = toetsNaam;
+    }
+
+    public void setAantalGemaakteToetsen(int aantalGemaakteToetsen) {
+        this.aantalGemaakteToetsen = aantalGemaakteToetsen;
     }
 
     public void setId(int id) {
