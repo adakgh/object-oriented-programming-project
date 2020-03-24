@@ -1,0 +1,3 @@
+Programming, Tentamen, 30
+Database, Herkansing tentamen, 10
+OOP1, Tentamen, 20
