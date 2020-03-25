@@ -12,16 +12,6 @@ import java.util.ArrayList;
  * @author Ghizlane el Adak
  */
 public class FakeResultaatDAO extends ResultaatDAO {
-
-    public FakeResultaatDAO(){
-        load();
-    }
-
-       @Override
-    public ArrayList<Resultaat> getAll() {
-        return objects;
-    }
-
     @Override
     public boolean load() {
         objects = new ArrayList<>();

@@ -1,6 +1,7 @@
 package practicumopdracht.data;
 
-import java.util.ArrayList;
+import java.util.List;
+
 /**
  * DAO interface voor OOP2 practicumopdracht.
  *
@@ -8,7 +9,7 @@ import java.util.ArrayList;
  */
 public interface DAO<T> {
 
-    ArrayList<T> getAll();
+    List<T> getAll();
 
     T get(int id);
 

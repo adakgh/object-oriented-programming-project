@@ -10,11 +10,6 @@ import java.util.ArrayList;
  * @author Ghizlane el Adak
  */
 public class FakeVakDAO extends VakDAO {
-
-    public FakeVakDAO(){
-        load();
-    }
-
     @Override
     public boolean load() {
         objects = new ArrayList<>();
