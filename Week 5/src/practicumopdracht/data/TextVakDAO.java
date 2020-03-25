@@ -18,7 +18,7 @@ public class TextVakDAO extends VakDAO {
     public boolean save() {
         try (PrintWriter writer = new PrintWriter(FILENAME)) {
             for (Vak vak : objects) {
-                writer.println(vak.toString());
+                writer.println(vak.getVakNaam() + ", " + vak.getToetsNaam() + ", " + vak.getAantalGemaakteToetsen() + ", " + vak.getId());
             }
             return true;
         } catch (FileNotFoundException ex) {
@@ -31,7 +31,6 @@ public class TextVakDAO extends VakDAO {
         return false;
     }
 
-
     @Override
     public boolean load() {
         objects = new ArrayList<>();
@@ -43,10 +42,10 @@ public class TextVakDAO extends VakDAO {
                 data = input.nextLine().split(",");
                 arrayList = new ArrayList<>();
 
-                for (String s : data) {
-                    arrayList.add(s.trim());
+                for (String string : data) {
+                    arrayList.add(string.trim());
                 }
-                objects.add(new Vak(arrayList.get(0), arrayList.get(1), Integer.parseInt(arrayList.get(2))));
+                objects.add(new Vak(arrayList.get(0), arrayList.get(1), Integer.parseInt(arrayList.get(2)), Integer.parseInt(arrayList.get(3))));
             }
             return true;
         } catch (FileNotFoundException ex) {

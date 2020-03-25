@@ -1,5 +1,6 @@
 package practicumopdracht.controllers;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
@@ -7,6 +8,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.input.MouseEvent;
 import practicumopdracht.MainApplication;
+import practicumopdracht.data.ResultaatDAO;
 import practicumopdracht.data.VakDAO;
 import practicumopdracht.models.Vak;
 import practicumopdracht.views.VakView;
@@ -28,15 +30,27 @@ public class VakController extends Controller {
     private VakView vakView;
     private Alert alert;
     private VakDAO vakDAO;
+    private ResultaatDAO resultaatDAO;
 
     public VakController() {
         vakView = new VakView();
         vakDAO = MainApplication.getVakDAO();
+        resultaatDAO = MainApplication.getResultaatDAO();
 
         vakView.getTerugButton().setOnAction(e -> pressedTerug());
         vakView.getNieuwButton().setOnAction(e -> pressedNieuw());
         vakView.getVerwijderenButton().setOnAction(e -> pressedVerwijderen());
         vakView.getOpslaanButton().setOnAction(e -> pressedOpslaan());
+
+        vakView.getOpslaanMenuItem().setOnAction(e -> {
+            alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Opslaan");
+            alert.setHeaderText("Je hebt op de opslaan-knop gedrukt!");
+            alert.setContentText("Weet je zeker dat je alle items wilt opslaan?");
+            saveData();
+        });
+        vakView.getLaadMenuItem().setOnAction(e -> loadData());
+        vakView.getSluitMenuItem().setOnAction(e -> exit());
 
         refreshData();
         pressedItem();
@@ -135,9 +149,7 @@ public class VakController extends Controller {
             alert.setContentText("Deze gegevens zijn succesvol opgeslagen: \n\n" + newVak);
 
             vakDAO.addOrUpdate(newVak);
-            saveData();
             refreshData();
-
             refreshFields();
         }
         alert.show();
@@ -145,8 +157,59 @@ public class VakController extends Controller {
 
     //data opslaan
     private void saveData() {
-        vakDAO.save();
-        MainApplication.getVakDAO().save();
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK) {
+            vakDAO.save();
+            MainApplication.getVakDAO().save();
+            resultaatDAO.save();
+            MainApplication.getResultaatDAO().save();
+
+            alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setHeaderText("Opslaan is gelukt!");
+            alert.show();
+        }
+    }
+
+    //data laden
+    private void loadData() {
+        alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Laden");
+        alert.setHeaderText("Je hebt op de laden-knop gedrukt!");
+        alert.setContentText("Weet je zeker dat je alle items wilt laden?");
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK) {
+            vakDAO.load();
+            MainApplication.getVakDAO().load();
+
+            resultaatDAO.load();
+            MainApplication.getResultaatDAO().load();
+
+            refreshData();
+            alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setHeaderText("Laden is gelukt!");
+            alert.show();
+        }
+    }
+
+    //afsluiten
+    private void exit() {
+        alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Laden");
+        alert.setHeaderText("Je hebt op de sluit-knop gedrukt!");
+        alert.setContentText("Weet je zeker dat je de applicatie wilt sluiten?");
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK) {
+            alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Opslaan");
+            alert.setHeaderText("Sla je gegevens op anders gaan ze verloren!");
+            alert.setContentText("Wil je je gegevens opslaan?");
+
+            saveData();
+            alert.show();
+        }
+        Platform.exit();
     }
 
     //fields refreshen

@@ -17,12 +17,13 @@ import java.util.Scanner;
  */
 public class TextResultaatDAO extends ResultaatDAO {
     private static final String FILENAME = "/Users/ghizlane/oop2/Week 5/textfiles/ResultatenFile.txt";
+    private Vak vak;
 
     @Override
     public boolean save() {
         try (PrintWriter writer = new PrintWriter(FILENAME)) {
             for (Resultaat resultaat : objects) {
-                writer.println(resultaat.toString());
+                writer.println(resultaat.getMasterId() + ", " + resultaat.getStudentennummer() + ", " + resultaat.getVolledigeNaamStudent() + ", " + resultaat.getDatum() + ", " + resultaat.getCijfer() + ", " + resultaat.getGehaald());
             }
             return true;
         } catch (FileNotFoundException ex) {
@@ -46,10 +47,10 @@ public class TextResultaatDAO extends ResultaatDAO {
                 data = input.nextLine().split(",");
                 arrayList = new ArrayList<>();
 
-                for (String s : data) {
-                    arrayList.add(s.trim());
+                for (String string : data) {
+                    arrayList.add(string.trim());
                 }
-                objects.add(new Resultaat(Integer.parseInt(arrayList.get(0)), Integer.parseInt(arrayList.get(1)), arrayList.get(2), LocalDate.parse(arrayList.get(3)), Double.parseDouble(arrayList.get(4)), Boolean.parseBoolean(arrayList.get(5)), new Vak(arrayList.get(6), arrayList.get(7), Integer.parseInt(arrayList.get(8)))));
+                objects.add(new Resultaat(Integer.parseInt(arrayList.get(0)), Integer.parseInt(arrayList.get(1)), arrayList.get(2), LocalDate.parse(arrayList.get(3)), Double.parseDouble(arrayList.get(4)), Boolean.parseBoolean(arrayList.get(5))));
             }
             return true;
         } catch (FileNotFoundException ex) {

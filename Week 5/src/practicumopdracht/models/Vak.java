@@ -18,6 +18,11 @@ public class Vak {
         this.aantalGemaakteToetsen = aantalGemaakteToetsen;
     }
 
+    public Vak(String vakNaam, String toetsNaam, int aantalGemaakteToetsen, int id) {
+        this(vakNaam, toetsNaam, aantalGemaakteToetsen);
+        this.id = id;
+    }
+
     public String getVakNaam() {
         return vakNaam;
     }

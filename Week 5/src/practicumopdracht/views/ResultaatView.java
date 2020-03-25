@@ -55,7 +55,7 @@ public class ResultaatView extends View {
         opslaanButton = new Button("Opslaan");
         nieuwButton = new Button("Nieuw");
         verwijderenButton = new Button("Verwijderen");
-        terugButton = new Button("Terug naar overzicht");
+        terugButton = new Button("Terug naar vak");
 
         view = new GridPane();
         view.setHgap(15);

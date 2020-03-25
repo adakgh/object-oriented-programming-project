@@ -1,5 +1,7 @@
 package practicumopdracht.models;
 
+import practicumopdracht.MainApplication;
+
 import java.time.LocalDate;
 
 /**
@@ -18,7 +20,7 @@ public class Resultaat {
     private int id;
     private int masterId;
 
-    public Resultaat(int masterId, int studentennummer, String volledigeNaamStudent, LocalDate datum, double cijfer, boolean gehaald, Vak hoortBijVak) {
+    public Resultaat(int masterId, int studentennummer, String volledigeNaamStudent, LocalDate datum, double cijfer, boolean gehaald) {
         id = 1;
         this.masterId = masterId;
         this.studentennummer = studentennummer;
@@ -26,7 +28,7 @@ public class Resultaat {
         this.datum = datum;
         this.cijfer = cijfer;
         this.gehaald = gehaald;
-        this.hoortBijVak = hoortBijVak;
+        this.hoortBijVak = MainApplication.getVakDAO().get(masterId);
     }
 
     public int getId() {

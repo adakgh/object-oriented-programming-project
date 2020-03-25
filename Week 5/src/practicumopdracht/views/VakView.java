@@ -3,7 +3,7 @@ package practicumopdracht.views;
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
-//import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -29,12 +29,12 @@ public class VakView extends View {
     private VBox vBox;
     private HBox hBox;
 
-//    private BorderPane borderPane;
-//    private Menu menu;
-//    private MenuItem laadMenuItem;
-//    private MenuItem opslaanMenuItem;
-//    private MenuItem sluitMenuItem;
-//    private SeparatorMenuItem separator;
+    private BorderPane borderPane;
+    private Menu menu;
+    private MenuItem laadMenuItem;
+    private MenuItem opslaanMenuItem;
+    private MenuItem sluitMenuItem;
+    private SeparatorMenuItem separator;
 
 
     public VakView() {
@@ -55,34 +55,39 @@ public class VakView extends View {
         nieuwButton = new Button("Nieuw");
         verwijderenButton = new Button("Verwijderen");
         terugButton = new Button("Ga naar resultaat");
-//        borderPane = new BorderPane();
+        borderPane = new BorderPane();
+        menu = new Menu("Bestand");
+        separator = new SeparatorMenuItem();
+        laadMenuItem = new MenuItem("Laden");
+        opslaanMenuItem = new MenuItem("Opslaan");
+        sluitMenuItem = new MenuItem("Afsluiten");
 
         view = new GridPane();
         view.setHgap(15);
         view.setVgap(10);
         view.setPadding(new Insets(10, 10, 10, 10));
 
-        view.add(vakcomboBoxLabel, 0, 0);
+        view.add(vakcomboBoxLabel, 0, 2);
         vakcomboBoxLabel.setPrefWidth(300);
-        view.add(vak, 1, 0);
+        view.add(vak, 1, 2);
         vak.setPrefWidth(500);
 
-        view.add(naamLabel, 0, 1);
-        view.add(toetsNaamInvoerVeld, 1, 1);
+        view.add(naamLabel, 0, 3);
+        view.add(toetsNaamInvoerVeld, 1, 3);
         toetsNaamInvoerVeld.setPrefHeight(5);
 
-        view.add(aantalToetsenLabel, 0, 2);
-        view.add(aantalGemaakteToetsenInvoerVeld, 1, 2);
+        view.add(aantalToetsenLabel, 0, 4);
+        view.add(aantalGemaakteToetsenInvoerVeld, 1, 4);
 
         //VBox
         vBox = new VBox(opslaanButton, listView);
         view.getChildren().add(vBox);
-        view.add(opslaanButton, 0, 4, 2, 1);
+        view.add(opslaanButton, 0, 5, 2, 1);
         opslaanButton.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
         opslaanButton.setPrefWidth(400);
 
-        view.add(listView, 0, 5, 2, 1);
-        listView.setPrefHeight(200);
+        view.add(listView, 0, 6, 2, 1);
+        listView.setPrefHeight(180);
         vBox.setSpacing(10);
 
         //HBox
@@ -90,34 +95,23 @@ public class VakView extends View {
         view.getChildren().add(hBox);
         hBox.setSpacing(100);
 
-        view.add(nieuwButton, 0, 8);
+        view.add(nieuwButton, 0, 7);
         nieuwButton.setPrefWidth(450);
 
-        view.add(verwijderenButton, 1, 8);
+        view.add(verwijderenButton, 1, 7);
         verwijderenButton.setPrefWidth(400);
 
-        view.add(terugButton, 0, 9, 2, 1);
+        view.add(terugButton, 0, 8, 2, 1);
         terugButton.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
         terugButton.setPrefWidth(500);
 
-//        view.add(borderPane, 0, 0,2 ,1);
-//
-//        borderPane.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-//
-//        menu = new Menu("Bestand");
-//
-//        separator = new SeparatorMenuItem();
-//        laadMenuItem = new MenuItem("Laden");
-//        opslaanMenuItem = new MenuItem("Opslaan");
-//        sluitMenuItem = new MenuItem("Afsluiten");
-//
-//        menu.getItems().addAll(laadMenuItem, opslaanMenuItem, separator, sluitMenuItem);
-//        MenuBar menuBar = new MenuBar(menu);
-//
-//        borderPane.setTop(menuBar);
-        //TODO: optie bestand en daarin laden, opslaan en afsluiten.
+        //BorderPane
+        view.add(borderPane,0,0,2,1);
+        borderPane.setPadding(new Insets(-10, -10, -10,-10));
+        menu.getItems().addAll(laadMenuItem, opslaanMenuItem, separator, sluitMenuItem);
+        MenuBar menuBar = new MenuBar(menu);
+        borderPane.setTop(menuBar);
     }
-
 
     //getters
     public Button getOpslaanButton() {
@@ -150,6 +144,18 @@ public class VakView extends View {
 
     public ListView<Vak> getListView() {
         return listView;
+    }
+
+    public MenuItem getLaadMenuItem() {
+        return laadMenuItem;
+    }
+
+    public MenuItem getOpslaanMenuItem() {
+        return opslaanMenuItem;
+    }
+
+    public MenuItem getSluitMenuItem() {
+        return sluitMenuItem;
     }
 
     @Override

@@ -16,6 +16,7 @@ public class FakeVakDAO extends VakDAO {
         objects.add(new Vak("Programming", "Tentamen", 30));
         objects.add(new Vak("Database", "Herkansing tentamen", 10));
         objects.add(new Vak("OOP1", "Tentamen", 20));
+        objects.add(new Vak("Nederlands", "Schrijfopdracht", 15));
         return true;
     }
 

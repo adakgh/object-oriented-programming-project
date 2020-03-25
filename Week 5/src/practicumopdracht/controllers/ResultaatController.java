@@ -207,27 +207,20 @@ public class ResultaatController extends Controller {
             alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setHeaderText("Opslaan is gelukt!");
 
-            Resultaat newResultaat = new Resultaat(-1, parseInt(resultaatView.getStudentennummerInvoerVeld().getText()),
+            Resultaat newResultaat = new Resultaat(resultaatView.getVakken().getSelectionModel().getSelectedItem().getId(), parseInt(resultaatView.getStudentennummerInvoerVeld().getText()),
                     resultaatView.getVolledigeNaamStudentInvoerVeld().getText(),
                     resultaatView.getDatumInvoerVeld().getValue(),
                     parseInt(resultaatView.getCijferInvoerVeld().getText()),
-                    resultaatView.getGehaaldInvoerVeld().isSelected(),
-                    resultaatView.getVakken().getValue()
+                    resultaatView.getGehaaldInvoerVeld().isSelected()
             );
+
             alert.setContentText("Deze gegevens zijn succesvol opgeslagen: \n\n" + newResultaat);
 
             resultaatDAO.addOrUpdate(newResultaat);
-            saveData();
             refreshData();
             refreshFields();
         }
         alert.show();
-    }
-
-    //data opslaan
-    private void saveData() {
-        resultaatDAO.save();
-        MainApplication.getVakDAO().save();
     }
 
     //fields refreshen
