@@ -17,6 +17,7 @@ import practicumopdracht.views.View;
 import java.util.List;
 import java.util.Optional;
 
+import static java.lang.Double.parseDouble;
 import static java.lang.Integer.parseInt;
 
 /**
@@ -35,7 +36,7 @@ public class ResultaatController extends Controller {
     private ResultaatDAO resultaatDAO;
     private VakDAO vakDAO;
 
-    public ResultaatController() {
+    public ResultaatController(Vak v) {
         resultaatView = new ResultaatView();
         vakDAO = MainApplication.getVakDAO();
         resultaatDAO = MainApplication.getResultaatDAO();
@@ -45,15 +46,16 @@ public class ResultaatController extends Controller {
         resultaatView.getVerwijderenButton().setOnAction(e -> pressedVerwijderen());
         resultaatView.getOpslaanButton().setOnAction(e -> pressedOpslaan());
 
-        refreshData();
+        refreshData(v);
         fillVakken();
         pressedItem();
     }
 
     //data verkrijgen
-    private void refreshData() {
-        ObservableList<Resultaat> resultaatList = FXCollections.observableList(resultaatDAO.getAll());
+    private void refreshData(Vak v) {
+        ObservableList<Resultaat> resultaatList = FXCollections.observableList(resultaatDAO.getAllFor(v));
         resultaatView.getListView().setItems(resultaatList);
+        resultaatView.getVakken().setValue(v);
     }
 
     //combobox met vakken vullen
@@ -99,8 +101,7 @@ public class ResultaatController extends Controller {
 
             if (resultverwijderen.get() == ButtonType.OK) {
                 resultaatDAO.remove(selectedItem);
-                refreshData();
-                refreshFields();
+                refreshData(resultaatView.getVakken().getValue());
             }
         }
     }
@@ -127,7 +128,7 @@ public class ResultaatController extends Controller {
 
     //cijfer is ongeldig
     public boolean cijferIsEmpty() {
-        return (resultaatView.getCijferInvoerVeld().getText().isEmpty() || resultaatView.getCijferInvoerVeld().getText().matches("[A-Za-z]") || resultaatView.getCijferInvoerVeld().getText().trim().isEmpty());
+        return (resultaatView.getCijferInvoerVeld().getText().isEmpty() || resultaatView.getCijferInvoerVeld().getText().matches("[A-Za-z]") || resultaatView.getCijferInvoerVeld().getText().trim().isEmpty() || Double.parseDouble(resultaatView.getCijferInvoerVeld().getText()) > 10);
     }
 
     //item opslaan
@@ -207,25 +208,27 @@ public class ResultaatController extends Controller {
             alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setHeaderText("Opslaan is gelukt!");
 
-            Resultaat newResultaat = new Resultaat(resultaatView.getVakken().getSelectionModel().getSelectedItem().getId(), parseInt(resultaatView.getStudentennummerInvoerVeld().getText()),
+            Resultaat newResultaat = new Resultaat(resultaatView.getVakken().getValue().getId(), parseInt(resultaatView.getStudentennummerInvoerVeld().getText()),
                     resultaatView.getVolledigeNaamStudentInvoerVeld().getText(),
                     resultaatView.getDatumInvoerVeld().getValue(),
-                    parseInt(resultaatView.getCijferInvoerVeld().getText()),
-                    resultaatView.getGehaaldInvoerVeld().isSelected()
-            );
-
+                    parseDouble(resultaatView.getCijferInvoerVeld().getText()),
+                    resultaatView.getGehaaldInvoerVeld().isSelected());
             alert.setContentText("Deze gegevens zijn succesvol opgeslagen: \n\n" + newResultaat);
 
+            if (!resultaatView.getListView().getSelectionModel().getSelectedItems().isEmpty()) {
+                newResultaat.setId(resultaatView.getListView().getSelectionModel().getSelectedItem().getId());
+            }
+
             resultaatDAO.addOrUpdate(newResultaat);
-            refreshData();
+            fillVakken();
             refreshFields();
+            refreshData(vakDAO.get(newResultaat.getMasterId()));
         }
         alert.show();
     }
 
     //fields refreshen
     public void refreshFields() {
-        resultaatView.getVakken().setValue(null);
         resultaatView.getStudentennummerInvoerVeld().clear();
         resultaatView.getVolledigeNaamStudentInvoerVeld().clear();
         resultaatView.getCijferInvoerVeld().clear();
@@ -238,43 +241,17 @@ public class ResultaatController extends Controller {
         resultaatView.getListView().setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                resultaatView.getOpslaanButton().setOnAction(e -> pressedBewerken());
-                for (int i = 0; i < 30; i++) {
-                    if (resultaatView.getListView().getSelectionModel().getSelectedItem().getId() == i) {
-                        resultaatView.getVakken().setValue(resultaatView.getListView().getSelectionModel().getSelectedItem().getHoortBijVak());
-                        resultaatView.getStudentennummerInvoerVeld().setText(String.valueOf(resultaatView.getListView().getSelectionModel().getSelectedItem().getStudentennummer()));
-                        resultaatView.getVolledigeNaamStudentInvoerVeld().setText(resultaatView.getListView().getSelectionModel().getSelectedItem().getVolledigeNaamStudent());
-                        resultaatView.getDatumInvoerVeld().setValue(resultaatView.getListView().getSelectionModel().getSelectedItem().getDatum());
-                        resultaatView.getCijferInvoerVeld().setText(String.valueOf(resultaatView.getListView().getSelectionModel().getSelectedItem().getCijfer()));
-                        resultaatView.getGehaaldInvoerVeld().setSelected(resultaatView.getListView().getSelectionModel().getSelectedItem().getGehaald());
-                    }
+                if (!resultaatView.getListView().getSelectionModel().getSelectedItems().isEmpty()) {
+                    Resultaat resultaat = resultaatView.getListView().getSelectionModel().getSelectedItem();
+                    resultaatView.getVakken().setValue(vakDAO.get(resultaat.getMasterId()));
+                    resultaatView.getStudentennummerInvoerVeld().setText(String.valueOf(resultaat.getStudentennummer()));
+                    resultaatView.getVolledigeNaamStudentInvoerVeld().setText(resultaat.getVolledigeNaamStudent());
+                    resultaatView.getDatumInvoerVeld().setValue(resultaat.getDatum());
+                    resultaatView.getCijferInvoerVeld().setText(String.valueOf(resultaat.getCijfer()));
+                    resultaatView.getGehaaldInvoerVeld().setSelected(resultaat.getGehaald());
                 }
             }
         });
-    }
-
-    //listview item bewerken
-    public void pressedBewerken() {
-        Resultaat bewerkteItem = resultaatView.getListView().getSelectionModel().getSelectedItem();
-        if (bewerkteItem.getId() == bewerkteItem.getId()) {
-            alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setHeaderText("Bewerken is gelukt!");
-
-            bewerkteItem.setHoortBijVak(resultaatView.getVakken().getValue());
-            bewerkteItem.setStudentennummer(Integer.parseInt(resultaatView.getStudentennummerInvoerVeld().getText()));
-            bewerkteItem.setVolledigeNaamStudent(resultaatView.getVolledigeNaamStudentInvoerVeld().getText());
-            bewerkteItem.setDatum(resultaatView.getDatumInvoerVeld().getValue());
-            bewerkteItem.setCijfer(Double.parseDouble(resultaatView.getCijferInvoerVeld().getText()));
-            bewerkteItem.setGehaald(resultaatView.getGehaaldInvoerVeld().isSelected());
-
-            refreshData();
-            refreshFields();
-            alert.show();
-        } else {
-            alert = new Alert(Alert.AlertType.ERROR);
-            alert.setContentText("Je hebt niks geselecteerd om te bewerken!");
-            alert.show();
-        }
     }
 
     @Override

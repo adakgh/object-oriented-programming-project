@@ -13,6 +13,7 @@ import java.util.List;
  */
 public abstract class ResultaatDAO implements DAO<Resultaat> {
     protected List<Resultaat> objects;
+    private int id = 0;
 
     public ResultaatDAO() {
         load();
@@ -21,7 +22,7 @@ public abstract class ResultaatDAO implements DAO<Resultaat> {
     public List<Resultaat> getAllFor(Vak object) {
         ArrayList<Resultaat> resultaatList = new ArrayList<>();
         for (Resultaat resultaat : objects) {
-            if (resultaat.getHoortBijVak() == object) {
+            if (object.getId() == resultaat.getMasterId()) {
                 resultaatList.add(resultaat);
             }
         }
@@ -30,7 +31,7 @@ public abstract class ResultaatDAO implements DAO<Resultaat> {
 
     @Override
     public List<Resultaat> getAll() {
-        return new ArrayList<>(objects);
+        return objects;
     }
 
     @Override
@@ -45,7 +46,7 @@ public abstract class ResultaatDAO implements DAO<Resultaat> {
 
     @Override
     public void addOrUpdate(Resultaat object) {
-        if (object.getId() > 0) {
+        if (object.getId() > id) {
             int index = objects.indexOf(get(object.getId()));
             objects.remove(index);
             objects.add(index, object);

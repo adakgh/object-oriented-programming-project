@@ -11,8 +11,8 @@ import java.util.List;
  * @author Ghizlane el Adak
  */
 public abstract class VakDAO implements DAO<Vak> {
-    protected ArrayList<Vak> objects;
-    private int id = 1;
+    protected List<Vak> objects;
+    private int id = 0;
 
     public VakDAO() {
         load();
@@ -35,7 +35,7 @@ public abstract class VakDAO implements DAO<Vak> {
 
     @Override
     public void addOrUpdate(Vak object) {
-        if (object.getId() > 0) {
+        if (object.getId() > id) {
             int index = objects.indexOf(get(object.getId()));
             objects.remove(index);
             objects.add(index, object);

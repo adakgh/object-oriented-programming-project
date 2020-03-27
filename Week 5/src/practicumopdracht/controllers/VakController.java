@@ -64,7 +64,15 @@ public class VakController extends Controller {
 
     //switchen van view
     public void pressedTerug() {
-        MainApplication.switchController(new ResultaatController());
+        if (!vakView.getListView().getSelectionModel().getSelectedItems().isEmpty()) {
+            MainApplication.switchController(new ResultaatController(vakView.getListView().getSelectionModel().getSelectedItem()));
+        } else {
+            alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Naar resultaten");
+            alert.setHeaderText("Je hebt geen vak geselecteerd om resultaten bij te voegen!");
+            alert.setContentText("Selecteer alsjeblieft een vak");
+            alert.show();
+        }
     }
 
     //listview en fields legen
