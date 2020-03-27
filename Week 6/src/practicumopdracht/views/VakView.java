@@ -3,10 +3,7 @@ package practicumopdracht.views;
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import practicumopdracht.models.Vak;
 
 
@@ -36,6 +33,12 @@ public class VakView extends View {
     private MenuItem sluitMenuItem;
     private SeparatorMenuItem separator;
 
+    private Menu sortMenu;
+    private MenuItem sorteerNaamOplopend;
+    private MenuItem sorteerNaamAflopend;
+    private MenuItem sorteerAantalGemaakteToetsenOplopend;
+    private MenuItem sorteerAantalGemaakteToetsenAflopend;
+
 
     public VakView() {
         initLayout();
@@ -61,6 +64,11 @@ public class VakView extends View {
         laadMenuItem = new MenuItem("Laden");
         opslaanMenuItem = new MenuItem("Opslaan");
         sluitMenuItem = new MenuItem("Afsluiten");
+        sortMenu = new Menu("Sorteer");
+        sorteerNaamOplopend = new MenuItem("Naam (A-Z)");
+        sorteerNaamAflopend = new MenuItem("Naam (Z-A)");
+        sorteerAantalGemaakteToetsenOplopend = new MenuItem("Aantal gemaakte toetsen (0-9)");
+        sorteerAantalGemaakteToetsenAflopend = new MenuItem("Aantal gemaakte toetsen (9-0)");
 
         view = new GridPane();
         view.setHgap(15);
@@ -87,7 +95,7 @@ public class VakView extends View {
         opslaanButton.setPrefWidth(400);
 
         view.add(listView, 0, 6, 2, 1);
-        listView.setPrefHeight(200);
+        listView.setMinHeight(220);
         vBox.setSpacing(10);
 
         //HBox
@@ -106,10 +114,13 @@ public class VakView extends View {
         terugButton.setPrefWidth(500);
 
         //BorderPane
-        view.add(borderPane,0,0,2,1);
-        borderPane.setPadding(new Insets(-10, -10, -10,-10));
+        view.add(borderPane, 0, 0, 2, 1);
+        borderPane.setPadding(new Insets(-10, -10, -10, -10));
+
         menu.getItems().addAll(laadMenuItem, opslaanMenuItem, separator, sluitMenuItem);
-        MenuBar menuBar = new MenuBar(menu);
+        sortMenu.getItems().addAll(sorteerNaamOplopend, sorteerNaamAflopend, sorteerAantalGemaakteToetsenOplopend, sorteerAantalGemaakteToetsenAflopend);
+
+        MenuBar menuBar = new MenuBar(menu, sortMenu);
         borderPane.setTop(menuBar);
     }
 
@@ -156,6 +167,22 @@ public class VakView extends View {
 
     public MenuItem getSluitMenuItem() {
         return sluitMenuItem;
+    }
+
+    public MenuItem getSorteerNaamOplopend() {
+        return sorteerNaamOplopend;
+    }
+
+    public MenuItem getSorteerNaamAflopend() {
+        return sorteerNaamAflopend;
+    }
+
+    public MenuItem getSorteerAantalGemaakteToetsenOplopend() {
+        return sorteerAantalGemaakteToetsenOplopend;
+    }
+
+    public MenuItem getSorteerAantalGemaakteToetsenAflopend() {
+        return sorteerAantalGemaakteToetsenAflopend;
     }
 
     @Override

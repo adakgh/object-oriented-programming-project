@@ -14,8 +14,8 @@ import practicumopdracht.data.*;
  */
 public class MainApplication extends Application {
     private String TITLE = "Practicumopdracht OOP2 - Ghizlane el Adak";
-    private final int WIDTH = 640;
-    private final int HEIGHT = 520;
+    private final int WIDTH = 730;
+    private final int HEIGHT = 540;
     private static Stage stage;
 
     private static VakDAO vakDAO;

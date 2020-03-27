@@ -5,7 +5,6 @@ import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import practicumopdracht.models.Resultaat;
 import practicumopdracht.models.Vak;
@@ -32,10 +31,10 @@ public class ResultaatView extends View {
     private HBox hBox;
 
     private ToggleGroup toggleGroup;
-    private RadioButton sorteerNaamOplopend;
-    private RadioButton sorteerNaamAflopend;
     private RadioButton sorteerDatumOplopend;
     private RadioButton sorteerDatumAflopend;
+    private RadioButton sorteerStudentennummerOplopend;
+    private RadioButton sorteerStudentennummerAflopend;
 
     public ResultaatView() {
         initLayout();
@@ -49,6 +48,7 @@ public class ResultaatView extends View {
         Label datumLabel = new Label("Datum van toetsafname:");
         Label cijferLabel = new Label("Behaalde cijfer:");
         Label gehaaldLabel = new Label("Gehaald?");
+        Label sorteerLabel = new Label("Sortering:");
 
         vakken = new ComboBox<>();
         studentennummerInvoerVeld = new TextField();
@@ -61,7 +61,11 @@ public class ResultaatView extends View {
         nieuwButton = new Button("Nieuw");
         verwijderenButton = new Button("Verwijderen");
         terugButton = new Button("Terug naar vak");
-        Label sorterLabel = new Label("Sortering:");
+        toggleGroup = new ToggleGroup();
+        sorteerStudentennummerOplopend = new RadioButton("Studentennummer (0-9)");
+        sorteerStudentennummerAflopend = new RadioButton("Studentennummer (9-0)");
+        sorteerDatumOplopend = new RadioButton("Datum, nieuw naar oud");
+        sorteerDatumAflopend = new RadioButton("Datum, oud naar nieuw");
 
         view = new GridPane();
         view.setHgap(15);
@@ -99,27 +103,17 @@ public class ResultaatView extends View {
         listView.setPrefHeight(200);
         vBox.setSpacing(10);
 
+        //sorterenHBox
         HBox sorteerKnoppen = new HBox();
         view.add(sorteerKnoppen, 0, 8, 2, 1);
-        toggleGroup = new ToggleGroup();
-        sorteerNaamOplopend = new RadioButton("Naam, oplopend");
-        sorteerNaamOplopend.setToggleGroup(toggleGroup);
-        sorteerNaamAflopend = new RadioButton("Naam, aflopend");
-        sorteerNaamAflopend.setToggleGroup(toggleGroup);
-        sorteerDatumOplopend = new RadioButton("Datum, oplopend");
+
+        sorteerStudentennummerOplopend.setToggleGroup(toggleGroup);
+        sorteerStudentennummerAflopend.setToggleGroup(toggleGroup);
         sorteerDatumOplopend.setToggleGroup(toggleGroup);
-        sorteerDatumAflopend = new RadioButton("Datum, aflopend");
         sorteerDatumAflopend.setToggleGroup(toggleGroup);
 
-        sorterLabel.setMaxWidth(Double.MAX_VALUE);
-
         sorteerKnoppen.setSpacing(10);
-        HBox.setHgrow(sorteerNaamOplopend, Priority.ALWAYS);
-        HBox.setHgrow(sorteerNaamAflopend, Priority.ALWAYS);
-        HBox.setHgrow(sorteerDatumOplopend, Priority.ALWAYS);
-        HBox.setHgrow(sorteerDatumAflopend, Priority.ALWAYS);
-        HBox.setHgrow(sorterLabel, Priority.ALWAYS);
-        sorteerKnoppen.getChildren().addAll(sorterLabel, sorteerNaamOplopend, sorteerNaamAflopend, sorteerDatumOplopend, sorteerDatumAflopend);
+        sorteerKnoppen.getChildren().addAll(sorteerLabel, sorteerStudentennummerOplopend, sorteerStudentennummerAflopend, sorteerDatumOplopend, sorteerDatumAflopend);
 
         //HBox
         hBox = new HBox(nieuwButton, verwijderenButton);
@@ -180,6 +174,22 @@ public class ResultaatView extends View {
 
     public ListView<Resultaat> getListView() {
         return listView;
+    }
+
+    public RadioButton getSorteerDatumOplopend() {
+        return sorteerDatumOplopend;
+    }
+
+    public RadioButton getSorteerDatumAflopend() {
+        return sorteerDatumAflopend;
+    }
+
+    public RadioButton getSorteerStudentennummerOplopend() {
+        return sorteerStudentennummerOplopend;
+    }
+
+    public RadioButton getSorteerStudentennummerAflopend() {
+        return sorteerStudentennummerAflopend;
     }
 
     @Override

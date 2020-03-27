@@ -4,6 +4,11 @@ import practicumopdracht.models.Vak;
 
 import java.util.Comparator;
 
+/**
+ * Master aantal gemaakte toetsen comparator voor OOP2 practicumopdracht.
+ *
+ * @author Ghizlane el Adak
+ */
 public class VakNumberOfTestsMadeComparator {
 
     public static class vakAantalOplopend implements Comparator<Vak> {

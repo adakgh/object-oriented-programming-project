@@ -8,12 +8,15 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.input.MouseEvent;
 import practicumopdracht.MainApplication;
+import practicumopdracht.comparators.VakNameComparator;
+import practicumopdracht.comparators.VakNumberOfTestsMadeComparator;
 import practicumopdracht.data.ResultaatDAO;
 import practicumopdracht.data.VakDAO;
 import practicumopdracht.models.Vak;
 import practicumopdracht.views.VakView;
 import practicumopdracht.views.View;
 
+import java.util.Comparator;
 import java.util.Optional;
 
 import static java.lang.Integer.parseInt;
@@ -51,6 +54,13 @@ public class VakController extends Controller {
         });
         vakView.getLaadMenuItem().setOnAction(e -> loadData());
         vakView.getSluitMenuItem().setOnAction(e -> exit());
+
+        vakView.getSorteerNaamOplopend().setOnAction(e -> sortNameAsc());
+        vakView.getSorteerNaamAflopend().setOnAction(e -> sortNameDesc());
+        vakView.getSorteerAantalGemaakteToetsenOplopend().setOnAction(e -> sortTestsMadeAsc());
+        vakView.getSorteerAantalGemaakteToetsenAflopend().setOnAction(e -> sortTestsMadeDesc());
+
+        sort(new VakNameComparator.vakNaamOplopend());
 
         refreshData();
         pressedItem();
@@ -263,6 +273,31 @@ public class VakController extends Controller {
             alert.setContentText("Je hebt niks geselecteerd om te bewerken!");
             alert.show();
         }
+    }
+
+    //sortering ophalen
+    private void sort(Comparator<Vak> comparator) {
+        FXCollections.sort(vakView.getListView().getItems(), comparator);
+    }
+
+    //naam oplopend sorteren
+    public void sortNameAsc(){
+        sort(new VakNameComparator.vakNaamOplopend());
+    }
+
+    //naam aflopend sorteren
+    public void sortNameDesc(){
+        sort(new VakNameComparator.vakNaamAflopend());
+    }
+
+    //aantal gemaakte toetsen oplopend sorteren
+    public void sortTestsMadeAsc(){
+        sort(new VakNumberOfTestsMadeComparator.vakAantalOplopend());
+    }
+
+    //aantal gemaakte toetsen aflopend sorteren
+    public void sortTestsMadeDesc(){
+        sort(new VakNumberOfTestsMadeComparator.vakAantalAflopend());
     }
 
     @Override

@@ -6,6 +6,11 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Detail object DAO voor OOP2 practicumopdracht.
+ *
+ * @author Ghizlane el Adak
+ */
 public class ObjectResultaatDAO extends ResultaatDAO {
     private static final String FILENAME = "/Users/ghizlane/oop2/Week 6/textfiles/ResultatenFile.dat";
 
@@ -38,7 +43,7 @@ public class ObjectResultaatDAO extends ResultaatDAO {
         } catch (FileNotFoundException ex) {
             System.err.println("ResultatenFile not Found");
         } catch (EOFException ex) {
-            System.err.println("Alles is gelezen");
+            System.err.println("Alle data is gelezen");
         } catch (IOException ex) {
             System.err.println(ex);
         } catch (Exception ex) {

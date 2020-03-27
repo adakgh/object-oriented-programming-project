@@ -7,14 +7,15 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.input.MouseEvent;
 import practicumopdracht.MainApplication;
+import practicumopdracht.comparators.ResultaatDateComparator;
+import practicumopdracht.comparators.ResultaatStudentIDComparator;
 import practicumopdracht.data.ResultaatDAO;
-import practicumopdracht.data.VakDAO;
 import practicumopdracht.models.Resultaat;
 import practicumopdracht.models.Vak;
 import practicumopdracht.views.ResultaatView;
-import practicumopdracht.views.VakView;
 import practicumopdracht.views.View;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -44,6 +45,13 @@ public class ResultaatController extends Controller {
         resultaatView.getNieuwButton().setOnAction(e -> pressedNieuw());
         resultaatView.getVerwijderenButton().setOnAction(e -> pressedVerwijderen());
         resultaatView.getOpslaanButton().setOnAction(e -> pressedOpslaan());
+
+        resultaatView.getSorteerDatumOplopend().setOnAction(e -> sortDateAsc());
+        resultaatView.getSorteerDatumAflopend().setOnAction(e -> sortDateDesc());
+        resultaatView.getSorteerStudentennummerOplopend().setOnAction(e -> sortStudentIDAsc());
+        resultaatView.getSorteerStudentennummerAflopend().setOnAction(e -> sortStudentIDDesc());
+
+        sort(new ResultaatStudentIDComparator.resultaatStudentennummerOplopend());
 
         refreshData(v);
         fillVakken();
@@ -254,6 +262,30 @@ public class ResultaatController extends Controller {
         });
     }
 
+    //sortering ophalen
+    private void sort(Comparator<Resultaat> comparator) {
+        FXCollections.sort(resultaatView.getListView().getItems(), comparator);
+    }
+
+    //datum oplopend sorteren
+    public void sortDateAsc(){
+        sort(new ResultaatDateComparator.resultaatDatumOplopend());
+    }
+
+    //datum aflopend sorteren
+    public void sortDateDesc(){
+        sort(new ResultaatDateComparator.resultaatDatumAflopend());
+    }
+
+    //studentennummer oplopend sorteren
+    public void sortStudentIDAsc(){
+        sort(new ResultaatStudentIDComparator.resultaatStudentennummerOplopend());
+    }
+
+    //studentennummer aflopend sorteren
+    public void sortStudentIDDesc(){
+        sort(new ResultaatStudentIDComparator.resultaatStudentennummerAflopend());
+    }
     @Override
     public View getView() {
         return resultaatView;

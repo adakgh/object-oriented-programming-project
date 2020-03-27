@@ -4,13 +4,18 @@ import practicumopdracht.models.Vak;
 
 import java.util.Comparator;
 
+/**
+ * Master naam comparator voor OOP2 practicumopdracht.
+ *
+ * @author Ghizlane el Adak
+ */
 public class VakNameComparator {
 
     public static class vakNaamOplopend implements Comparator<Vak> {
         //oplopende sortering
         @Override
         public int compare(Vak o1, Vak o2) {
-            return o1.getToetsNaam().compareTo(o2.getToetsNaam());
+            return o1.getVakNaam().compareTo(o2.getVakNaam());
         }
     }
 
@@ -18,7 +23,7 @@ public class VakNameComparator {
         //aflopende sortering
         @Override
         public int compare(Vak o1, Vak o2) {
-            return o2.getToetsNaam().compareTo(o1.getToetsNaam());
+            return o2.getVakNaam().compareTo(o1.getVakNaam());
         }
     }
 }
