@@ -9,7 +9,6 @@ import javafx.scene.input.MouseEvent;
 import practicumopdracht.MainApplication;
 import practicumopdracht.data.FakeVakDAO;
 import practicumopdracht.models.Vak;
-import practicumopdracht.views.ResultaatView;
 import practicumopdracht.views.VakView;
 import practicumopdracht.views.View;
 
@@ -44,14 +43,22 @@ public class VakController extends Controller {
     }
 
     //data verkrijgen
-    private void refreshData() {
+    public void refreshData() {
         ObservableList<Vak> vakList = FXCollections.observableList(vakDAO.getAll());
         vakView.getListView().setItems(vakList);
     }
 
     //switchen van view
     public void pressedTerug() {
-        MainApplication.switchController(new ResultaatController());
+        if (!vakView.getListView().getSelectionModel().getSelectedItems().isEmpty()) {
+            MainApplication.switchController(new ResultaatController(vakView.getListView().getSelectionModel().getSelectedItem()));
+        } else {
+            alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Naar resultaten");
+            alert.setHeaderText("Je hebt geen vak geselecteerd om resultaten bij te voegen!");
+            alert.setContentText("Selecteer alsjeblieft een vak");
+            alert.show();
+        }
     }
 
     //listview en fields legen
@@ -137,7 +144,6 @@ public class VakController extends Controller {
 
             vakDAO.addOrUpdate(newVak);
             refreshData();
-
             refreshFields();
         }
         alert.show();
@@ -156,7 +162,7 @@ public class VakController extends Controller {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 vakView.getOpslaanButton().setOnAction(e -> pressedBewerken());
-                for (int i = 0; i < 10; i++) {
+                for (int i = 0; i < 30; i++) {
                     if (vakView.getListView().getSelectionModel().getSelectedItem().getId() == i) {
                         vakView.getVak().setText(vakView.getListView().getSelectionModel().getSelectedItem().getVakNaam());
                         vakView.getToetsNaamInvoerVeld().setText(vakView.getListView().getSelectionModel().getSelectedItem().getToetsNaam());
@@ -176,7 +182,7 @@ public class VakController extends Controller {
 
             bewerkteItem.setVakNaam(vakView.getVak().getText());
             bewerkteItem.setToetsNaam(vakView.getToetsNaamInvoerVeld().getText());
-            bewerkteItem.setAantalGemaakteToetsen(Integer.valueOf(vakView.getAantalGemaakteToetsenInvoerVeld().getText()));
+            bewerkteItem.setAantalGemaakteToetsen(Integer.parseInt(vakView.getAantalGemaakteToetsenInvoerVeld().getText()));
 
             refreshData();
             refreshFields();

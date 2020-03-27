@@ -19,7 +19,6 @@ public class Resultaat {
     private int masterId;
 
     public Resultaat(int masterId, int studentennummer, String volledigeNaamStudent, LocalDate datum, double cijfer, boolean gehaald, Vak hoortBijVak) {
-        id = -1;
         this.masterId = masterId;
         this.studentennummer = studentennummer;
         this.volledigeNaamStudent = volledigeNaamStudent;

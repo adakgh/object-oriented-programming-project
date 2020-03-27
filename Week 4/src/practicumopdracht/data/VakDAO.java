@@ -3,31 +3,30 @@ package practicumopdracht.data;
 import practicumopdracht.models.Vak;
 
 import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Master DAO voor OOP2 practicumopdracht.
  *
  * @author Ghizlane el Adak
  */
 public abstract class VakDAO implements DAO<Vak> {
-    protected ArrayList<Vak> objects;
-    private int id = 1;
+    protected List<Vak> objects;
+    private int id = 0;
 
-    public VakDAO(){
-        objects = new ArrayList<>();
+    public VakDAO() {
         load();
     }
 
     @Override
-    public ArrayList<Vak> getAll() {
+    public List<Vak> getAll() {
         return objects;
     }
 
     @Override
     public Vak get(int id) {
-        for(Vak vak : objects)
-        {
-            if (vak.getId() == id)
-            {
+        for (Vak vak : objects) {
+            if (vak.getId() == id) {
                 return vak;
             }
         }
@@ -36,15 +35,14 @@ public abstract class VakDAO implements DAO<Vak> {
 
     @Override
     public void addOrUpdate(Vak object) {
-        if (object.getId() < 1)
-        {
+        if (object.getId() > id) {
+            int index = objects.indexOf(get(object.getId()));
+            objects.remove(index);
+            objects.add(index, object);
+        } else {
             object.setId(getUniqueId());
             objects.add(object);
-            return;
         }
-        int indexOfObject = objects.indexOf(get(object.getId()));
-        objects.remove(indexOfObject);
-        objects.add(indexOfObject, object);
     }
 
     @Override
@@ -58,19 +56,15 @@ public abstract class VakDAO implements DAO<Vak> {
     @Override
     public abstract boolean save();
 
-    private int getUniqueId(){
-        int highestId = -1;
-        for (Vak vak : objects)
-        {
-            if (vak.getId() > highestId)
-            {
-                highestId = vak.getId();
+    private int getUniqueId() {
+        int maxId = 0;
+
+        for (Vak vak : objects) {
+            if (vak.getId() > maxId) {
+                maxId = vak.getId();
             }
         }
-        if (highestId == -1)
-        {
-            return id;
-        }
-        return highestId + 1;
+        maxId++;
+        return maxId;
     }
 }

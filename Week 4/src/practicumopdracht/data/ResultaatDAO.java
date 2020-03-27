@@ -13,6 +13,7 @@ import java.util.List;
  */
 public abstract class ResultaatDAO implements DAO<Resultaat> {
     protected List<Resultaat> objects;
+    private int id = 0;
 
     public ResultaatDAO() {
         load();
@@ -21,7 +22,7 @@ public abstract class ResultaatDAO implements DAO<Resultaat> {
     public List<Resultaat> getAllFor(Vak object) {
         ArrayList<Resultaat> resultaatList = new ArrayList<>();
         for (Resultaat resultaat : objects) {
-            if (resultaat.getHoortBijVak() == object) {
+            if (object.getId() == resultaat.getMasterId()) {
                 resultaatList.add(resultaat);
             }
         }
@@ -45,14 +46,14 @@ public abstract class ResultaatDAO implements DAO<Resultaat> {
 
     @Override
     public void addOrUpdate(Resultaat object) {
-        if (object.getId() < 1) {
+        if (object.getId() > id) {
+            int index = objects.indexOf(get(object.getId()));
+            objects.remove(index);
+            objects.add(index, object);
+        } else {
             object.setId(getUniqueId());
             objects.add(object);
-            return;
         }
-        int indexOfObject = objects.indexOf(get(object.getId()));
-        objects.remove(indexOfObject);
-        objects.add(indexOfObject, object);
     }
 
     @Override
@@ -67,15 +68,13 @@ public abstract class ResultaatDAO implements DAO<Resultaat> {
     public abstract boolean save();
 
     private int getUniqueId() {
-        int highestId = -1;
-        for (Resultaat achievement : objects) {
-            if (achievement.getId() > highestId) {
-                highestId = achievement.getId();
+        int maxId = 0;
+        for (Resultaat resultaat : objects) {
+            if (resultaat.getId() > maxId) {
+                maxId = resultaat.getId();
             }
         }
-        if (highestId == -1) {
-            return 1;
-        }
-        return highestId + 1;
+        maxId++;
+        return maxId;
     }
 }
