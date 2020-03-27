@@ -1,0 +1,4 @@
+1, 103456789, Jantje Beton, 2020-03-25, 10, true
+1, 102345789, Linda van der Berg, 2020-03-25, 5.3, false
+2, 113456789, Pieter Zoon, 2020-03-24, 9.5, true
+3, 123456789, Jan Klaas, 2020-03-27, 4, false

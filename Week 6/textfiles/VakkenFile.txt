@@ -1,0 +1,4 @@
+Programming, Tentamen, 30, 1
+Database, Herkansing tentamen, 10, 2
+OOP1, Tentamen, 20, 3
+Nederlands, Schrijfopdracht, 15, 4
