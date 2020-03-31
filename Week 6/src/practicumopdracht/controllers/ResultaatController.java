@@ -45,6 +45,7 @@ public class ResultaatController extends Controller {
         resultaatView.getNieuwButton().setOnAction(e -> pressedNieuw());
         resultaatView.getVerwijderenButton().setOnAction(e -> pressedVerwijderen());
         resultaatView.getOpslaanButton().setOnAction(e -> pressedOpslaan());
+        resultaatView.getVakken().setOnAction(e -> refreshBox());
 
         resultaatView.getSorteerDatumOplopend().setOnAction(e -> sortDateAsc());
         resultaatView.getSorteerDatumAflopend().setOnAction(e -> sortDateDesc());
@@ -57,7 +58,6 @@ public class ResultaatController extends Controller {
         fillVakken();
         pressedItem();
     }
-
 
     //data verkrijgen
     private void refreshData(Vak v) {
@@ -257,6 +257,7 @@ public class ResultaatController extends Controller {
                     resultaatView.getDatumInvoerVeld().setValue(resultaat.getDatum());
                     resultaatView.getCijferInvoerVeld().setText(String.valueOf(resultaat.getCijfer()));
                     resultaatView.getGehaaldInvoerVeld().setSelected(resultaat.getGehaald());
+                    refreshBox();
                 }
             }
         });
@@ -286,6 +287,14 @@ public class ResultaatController extends Controller {
     public void sortStudentIDDesc(){
         sort(new ResultaatStudentIDComparator.resultaatStudentennummerAflopend());
     }
+
+    //resultaten met combobox mee veranderen
+    private void refreshBox() {
+        if (!resultaatView.getVakken().getSelectionModel().isEmpty()){
+            refreshData(resultaatView.getVakken().getValue());
+        }
+    }
+
     @Override
     public View getView() {
         return resultaatView;

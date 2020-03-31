@@ -45,6 +45,7 @@ public class ResultaatController extends Controller {
         resultaatView.getNieuwButton().setOnAction(e -> pressedNieuw());
         resultaatView.getVerwijderenButton().setOnAction(e -> pressedVerwijderen());
         resultaatView.getOpslaanButton().setOnAction(e -> pressedOpslaan());
+        resultaatView.getVakken().setOnAction(e -> refreshBox());
 
         refreshData(v);
         fillVakken();
@@ -252,6 +253,13 @@ public class ResultaatController extends Controller {
                 }
             }
         });
+    }
+
+    //resultaten met combobox mee veranderen
+    private void refreshBox() {
+        if (!resultaatView.getVakken().getSelectionModel().isEmpty()){
+            refreshData(resultaatView.getVakken().getValue());
+        }
     }
 
     @Override
