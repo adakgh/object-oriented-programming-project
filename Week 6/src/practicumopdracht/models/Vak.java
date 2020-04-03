@@ -39,18 +39,6 @@ public class Vak {
         return id;
     }
 
-    public void setVakNaam(String vakNaam) {
-        this.vakNaam = vakNaam;
-    }
-
-    public void setToetsNaam(String toetsNaam) {
-        this.toetsNaam = toetsNaam;
-    }
-
-    public void setAantalGemaakteToetsen(int aantalGemaakteToetsen) {
-        this.aantalGemaakteToetsen = aantalGemaakteToetsen;
-    }
-
     public void setId(int id) {
         this.id = id;
     }

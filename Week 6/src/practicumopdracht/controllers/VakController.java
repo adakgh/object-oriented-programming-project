@@ -166,6 +166,11 @@ public class VakController extends Controller {
                     parseInt(vakView.getAantalGemaakteToetsenInvoerVeld().getText()));
             alert.setContentText("Deze gegevens zijn succesvol opgeslagen: \n\n" + newVak);
 
+
+            if (!vakView.getListView().getSelectionModel().getSelectedItems().isEmpty()) {
+                newVak.setId(vakView.getListView().getSelectionModel().getSelectedItem().getId());
+            }
+
             vakDAO.addOrUpdate(newVak);
             refreshData();
             refreshFields();
@@ -242,37 +247,13 @@ public class VakController extends Controller {
         vakView.getListView().setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                vakView.getOpslaanButton().setOnAction(e -> pressedBewerken());
-                for (int i = 0; i < 30; i++) {
-                    if (vakView.getListView().getSelectionModel().getSelectedItem().getId() == i) {
+                    if (!vakView.getListView().getSelectionModel().getSelectedItems().isEmpty()) {
                         vakView.getVak().setText(vakView.getListView().getSelectionModel().getSelectedItem().getVakNaam());
                         vakView.getToetsNaamInvoerVeld().setText(vakView.getListView().getSelectionModel().getSelectedItem().getToetsNaam());
                         vakView.getAantalGemaakteToetsenInvoerVeld().setText(String.valueOf(vakView.getListView().getSelectionModel().getSelectedItem().getAantalGemaakteToetsen()));
                     }
                 }
-            }
         });
-    }
-
-    //listview item bewerken
-    public void pressedBewerken() {
-        Vak bewerkteItem = vakView.getListView().getSelectionModel().getSelectedItem();
-        if (bewerkteItem.getId() == bewerkteItem.getId()) {
-            alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setHeaderText("Bewerken is gelukt!");
-
-            bewerkteItem.setVakNaam(vakView.getVak().getText());
-            bewerkteItem.setToetsNaam(vakView.getToetsNaamInvoerVeld().getText());
-            bewerkteItem.setAantalGemaakteToetsen(Integer.parseInt(vakView.getAantalGemaakteToetsenInvoerVeld().getText()));
-
-            refreshData();
-            refreshFields();
-            alert.show();
-        } else {
-            alert = new Alert(Alert.AlertType.ERROR);
-            alert.setContentText("Je hebt niks geselecteerd om te bewerken!");
-            alert.show();
-        }
     }
 
     //sortering ophalen

@@ -147,7 +147,7 @@ public class ResultaatController extends Controller {
         if (comboboxIsNull() && studentennummerIsEmpty() && naamIsEmpty() && datumIsEmpty() && cijferIsEmpty()) {
             alert.setContentText(VAK_IS_VERPLICHT + "\n" + STUDENTENNUMMER_IS_VERPLICHT + "\n" + NAAM_IS_VERPLICHT + "\n" + DATUM_IS_ONGELDIG + "\n" + CIJFER_IS_ONGELDIG);
 
-            //4 niet ingevuld
+            //4 velden niet ingevuld
         } else if (cijferIsEmpty() && studentennummerIsEmpty() && naamIsEmpty() && datumIsEmpty()) {
             alert.setContentText(STUDENTENNUMMER_IS_VERPLICHT + "\n" + NAAM_IS_VERPLICHT + "\n" + DATUM_IS_ONGELDIG + "\n" + CIJFER_IS_ONGELDIG);
         } else if (comboboxIsNull() && studentennummerIsEmpty() && naamIsEmpty() && datumIsEmpty()) {
@@ -159,7 +159,7 @@ public class ResultaatController extends Controller {
         } else if (comboboxIsNull() && studentennummerIsEmpty() && naamIsEmpty() && cijferIsEmpty()) {
             alert.setContentText(VAK_IS_VERPLICHT + "\n" + STUDENTENNUMMER_IS_VERPLICHT + "\n" + NAAM_IS_VERPLICHT + "\n" + CIJFER_IS_ONGELDIG);
 
-            //3 niet ingevuld
+            //3 velden niet ingevuld
         } else if (comboboxIsNull() && studentennummerIsEmpty() && naamIsEmpty()) {
             alert.setContentText(VAK_IS_VERPLICHT + "\n" + STUDENTENNUMMER_IS_VERPLICHT + "\n" + NAAM_IS_VERPLICHT);
         } else if (comboboxIsNull() && studentennummerIsEmpty() && datumIsEmpty()) {
@@ -179,7 +179,7 @@ public class ResultaatController extends Controller {
         } else if (comboboxIsNull() && naamIsEmpty() && cijferIsEmpty()) {
             alert.setContentText(STUDENTENNUMMER_IS_VERPLICHT + "\n" + NAAM_IS_VERPLICHT + "\n" + CIJFER_IS_ONGELDIG);
 
-            //2 niet ingevuld
+            //2 velden niet ingevuld
         } else if (comboboxIsNull() && studentennummerIsEmpty()) {
             alert.setContentText(VAK_IS_VERPLICHT + "\n" + STUDENTENNUMMER_IS_VERPLICHT);
         } else if (studentennummerIsEmpty() && naamIsEmpty()) {
@@ -201,7 +201,7 @@ public class ResultaatController extends Controller {
         } else if (datumIsEmpty() && studentennummerIsEmpty()) {
             alert.setContentText(DATUM_IS_ONGELDIG + "\n" + STUDENTENNUMMER_IS_VERPLICHT);
 
-            //1 niet ingevuld
+            //1 veld niet ingevuld
         } else if (comboboxIsNull()) {
             alert.setContentText(VAK_IS_VERPLICHT);
         } else if (studentennummerIsEmpty()) {

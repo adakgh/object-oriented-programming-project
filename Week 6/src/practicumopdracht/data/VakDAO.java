@@ -2,7 +2,6 @@ package practicumopdracht.data;
 
 import practicumopdracht.models.Vak;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

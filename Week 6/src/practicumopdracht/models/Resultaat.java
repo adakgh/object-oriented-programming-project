@@ -55,36 +55,8 @@ public class Resultaat implements Serializable {
         return gehaald;
     }
 
-    public Vak getHoortBijVak() {
-        return hoortBijVak;
-    }
-
     public int getMasterId() {
         return masterId;
-    }
-
-    public void setStudentennummer(int studentennummer) {
-        this.studentennummer = studentennummer;
-    }
-
-    public void setVolledigeNaamStudent(String volledigeNaamStudent) {
-        this.volledigeNaamStudent = volledigeNaamStudent;
-    }
-
-    public void setDatum(LocalDate datum) {
-        this.datum = datum;
-    }
-
-    public void setCijfer(double cijfer) {
-        this.cijfer = cijfer;
-    }
-
-    public void setGehaald(boolean gehaald) {
-        this.gehaald = gehaald;
-    }
-
-    public void setHoortBijVak(Vak hoortBijVak) {
-        this.hoortBijVak = hoortBijVak;
     }
 
     public void setId(int id) {

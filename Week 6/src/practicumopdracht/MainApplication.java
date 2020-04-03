@@ -8,7 +8,7 @@ import practicumopdracht.controllers.VakController;
 import practicumopdracht.data.*;
 
 /**
- * Mainapplicarion class voor OOP2 practicumopdracht.
+ * Mainapplication class voor OOP2 practicumopdracht.
  *
  * @author Ghizlane el Adak
  */
