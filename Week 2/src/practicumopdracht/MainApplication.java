@@ -8,7 +8,7 @@ import practicumopdracht.views.ResultaatView;
 import practicumopdracht.views.VakView;
 
 public class MainApplication extends Application {
-    private String TITLE = "Practicumopdracht OOP2 - Ghizlane el Adak";
+    private String TITLE = "Practicumopdracht OOP2";
     private int WIDTH = 640;
     private int HEIGHT = 480;
 

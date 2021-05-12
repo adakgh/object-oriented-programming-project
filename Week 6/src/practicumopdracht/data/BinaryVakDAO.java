@@ -8,10 +8,9 @@ import java.util.ArrayList;
 /**
  * Master Binary DAO voor OOP2 practicumopdracht.
  *
- * @author Ghizlane el Adak
  */
 public class BinaryVakDAO extends VakDAO {
-    private static final String FILENAME = "/Users/ghizlane/oop2/Week 6/textfiles/VakkenFile.dat";
+    private static final String FILENAME = "/oop2/Week 6/textfiles/VakkenFile.dat";
 
     @Override
     public boolean save() {

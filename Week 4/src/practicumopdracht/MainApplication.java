@@ -11,10 +11,9 @@ import practicumopdracht.data.VakDAO;
 /**
  * Mainapplicarion class voor OOP2 practicumopdracht.
  *
- * @author Ghizlane el Adak
  */
 public class MainApplication extends Application {
-    private String TITLE = "Practicumopdracht OOP2 - Ghizlane el Adak";
+    private String TITLE = "Practicumopdracht OOP2";
     private final int WIDTH = 640;
     private final int HEIGHT = 480;
     private static Stage stage;

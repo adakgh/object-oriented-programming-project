@@ -12,7 +12,6 @@ import practicumopdracht.models.Vak;
 /**
  * Detail view voor OOP2 practicumopdracht.
  *
- * @author Ghizlane el Adak
  */
 public class ResultaatView extends View {
     private TextField studentennummerInvoerVeld;

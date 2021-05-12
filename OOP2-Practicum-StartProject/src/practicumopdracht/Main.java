@@ -14,7 +14,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) {
-        stage.setTitle("Practicumopdracht OOP2 - Ghizlane");
+        stage.setTitle("Practicumopdracht OOP2");
         stage.setWidth(640);
         stage.setHeight(480);
 

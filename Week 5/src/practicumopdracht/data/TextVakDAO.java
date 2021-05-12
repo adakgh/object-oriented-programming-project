@@ -9,10 +9,9 @@ import java.util.Scanner;
 /**
  * Master text DAO voor OOP2 practicumopdracht.
  *
- * @author Ghizlane el Adak
  */
 public class TextVakDAO extends VakDAO {
-    private static final String FILENAME = "/Users/ghizlane/oop2/Week 5/textfiles/VakkenFile.txt";
+    private static final String FILENAME = "/oop2/Week 5/textfiles/VakkenFile.txt";
 
     @Override
     public boolean save() {

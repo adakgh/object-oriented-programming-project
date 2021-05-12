@@ -7,7 +7,6 @@ import java.util.ArrayList;
 /**
  * Master Fake DAO voor OOP2 practicumopdracht.
  *
- * @author Ghizlane el Adak
  */
 public class FakeVakDAO extends VakDAO {
     @Override

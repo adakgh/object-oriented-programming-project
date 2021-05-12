@@ -7,7 +7,6 @@ import java.util.List;
 /**
  * Master DAO voor OOP2 practicumopdracht.
  *
- * @author Ghizlane el Adak
  */
 public abstract class VakDAO implements DAO<Vak> {
     protected List<Vak> objects;

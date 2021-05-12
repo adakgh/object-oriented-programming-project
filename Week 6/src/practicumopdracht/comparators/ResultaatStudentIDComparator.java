@@ -7,7 +7,6 @@ import java.util.Comparator;
 /**
  * Detail studentennummer comparator voor OOP2 practicumopdracht.
  *
- * @author Ghizlane el Adak
  */
 public class ResultaatStudentIDComparator {
 

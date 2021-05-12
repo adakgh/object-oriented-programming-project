@@ -13,10 +13,9 @@ import java.util.Scanner;
 /**
  * Detail text DAO voor OOP2 practicumopdracht.
  *
- * @author Ghizlane el Adak
  */
 public class TextResultaatDAO extends ResultaatDAO {
-    private static final String FILENAME = "/Users/ghizlane/oop2/Week 5/textfiles/ResultatenFile.txt";
+    private static final String FILENAME = "/oop2/Week 5/textfiles/ResultatenFile.txt";
     private Vak vak;
 
     @Override

@@ -3,7 +3,6 @@ package practicumopdracht.models;
 /**
  * Main model voor OOP2 practicumopdracht.
  *
- * @author Ghizlane el Adak
  */
 public class Vak {
     private String vakNaam;

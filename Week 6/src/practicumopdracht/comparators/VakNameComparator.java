@@ -7,7 +7,6 @@ import java.util.Comparator;
 /**
  * Master naam comparator voor OOP2 practicumopdracht.
  *
- * @author Ghizlane el Adak
  */
 public class VakNameComparator {
 

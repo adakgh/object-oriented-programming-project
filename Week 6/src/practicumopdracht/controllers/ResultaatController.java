@@ -25,7 +25,6 @@ import static java.lang.Integer.parseInt;
 /**
  * Detail controller voor OOP2 practicumopdracht.
  *
- * @author Ghizlane el Adak
  */
 public class ResultaatController extends Controller {
     private final String VAK_IS_VERPLICHT = "- Vak is verplicht!";

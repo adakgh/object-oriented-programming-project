@@ -5,7 +5,6 @@ import java.util.List;
 /**
  * DAO interface voor OOP2 practicumopdracht.
  *
- * @author Ghizlane el Adak
  */
 public interface DAO<T> {
 

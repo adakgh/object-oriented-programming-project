@@ -8,7 +8,6 @@ import java.time.LocalDate;
 /**
  * Detail model voor OOP2 practicumopdracht.
  *
- * @author Ghizlane el Adak
  */
 public class Resultaat implements Serializable {
     private transient Vak hoortBijVak;

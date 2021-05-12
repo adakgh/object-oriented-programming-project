@@ -13,7 +13,6 @@ import practicumopdracht.models.Vak;
 /**
  * Master view voor OOP2 practicumopdracht.
  *
- * @author Ghizlane el Adak
  */
 public class VakView extends View {
     //Attributen

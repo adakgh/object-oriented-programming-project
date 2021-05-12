@@ -9,7 +9,6 @@ import java.util.List;
 /**
  * Detail DAO voor OOP2 practicumopdracht.
  *
- * @author Ghizlane el Adak
  */
 public abstract class ResultaatDAO implements DAO<Resultaat> {
     protected List<Resultaat> objects;

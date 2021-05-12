@@ -9,10 +9,9 @@ import java.util.List;
 /**
  * Detail object DAO voor OOP2 practicumopdracht.
  *
- * @author Ghizlane el Adak
  */
 public class ObjectResultaatDAO extends ResultaatDAO {
-    private static final String FILENAME = "/Users/ghizlane/oop2/Week 6/textfiles/ResultatenFile.dat";
+    private static final String FILENAME = "/oop2/Week 6/textfiles/ResultatenFile.dat";
 
     @Override
     public boolean save() {

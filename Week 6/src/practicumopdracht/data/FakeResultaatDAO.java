@@ -8,7 +8,6 @@ import java.util.ArrayList;
 /**
  * Detail Fake DAO voor OOP2 practicumopdracht.
  *
- * @author Ghizlane el Adak
  */
 public class FakeResultaatDAO extends ResultaatDAO {
     @Override

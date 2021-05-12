@@ -11,7 +11,6 @@ import static java.lang.Integer.parseInt;
 /**
  * Master controller voor OOP2 practicumopdracht.
  *
- * @author Ghizlane el Adak
  */
 public class VakController extends Controller {
     private VakView vakView;

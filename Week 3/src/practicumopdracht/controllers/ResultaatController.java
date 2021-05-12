@@ -11,7 +11,6 @@ import static java.lang.Integer.parseInt;
 /**
  * Detail controller voor OOP2 practicumopdracht.
  *
- * @author Ghizlane el Adak
  */
 public class ResultaatController extends Controller {
     private ResultaatView resultaatView;
